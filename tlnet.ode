@@ -1,0 +1,33 @@
+p theta = 1
+
+# approx period = 11.24569
+
+x1'=-x1+max(-1.5*x2-.75*x3+theta,0)
+x2'=-x2+max(-.75*x1-1.5*x3+theta,0)
+x3'=-x3+max(-1.5*x1-.75*x2+theta,0)
+
+c1'=0
+c2'=0
+c3'=0
+
+global 1 -1.5*x2-.75*x3+theta {c1=1}
+global 1 -(-1.5*x2-.75*x3+theta) {c1=0}
+
+global 1 -.75*x1-1.5*x3+theta {c2=1}
+global 1 -(-.75*x1-1.5*x3+theta) {c2=0}
+
+global 1 -1.5*x1-.75*x2+theta {c3=1}
+global 1 -(-1.5*x1-.75*x2+theta) {c3=0}
+
+
+x1(0)=.5
+x2(0)=0
+x3(0)=0
+
+aux dx1dt=-x1+max(-1.5*x2-.75*x3+theta,0)
+aux dx2dt=-x2+max(-.75*x1-1.5*x3+theta,0)
+aux dx3dt=-x3+max(-1.5*x1-.75*x2+theta,0)
+
+@ total=4000
+@ xlo=0,xhi=100
+@ ylo=-.1,yhi=1.1
