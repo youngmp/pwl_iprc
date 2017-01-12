@@ -140,6 +140,7 @@ def ToF(R,fixedpts):
         return np.log((a3-LCinit(R,fixedpts))/a3)
     if R == 3:
         return np.log((b4-LCinit(R,fixedpts))/b4)
+
 def jumpMatrix(R,Rp1,fixedpts):
     """
    This functon returns the jump matrix for boundaries between regions R and R+1
@@ -322,14 +323,14 @@ def main():
     """
 
     # total perturbations
-    total_perts = 10
+    total_perts = 30
 
     # phase values where perturbations will be applied
     phis = np.linspace(0,2*math.pi,total_perts)
     #dx = 1e-4
     #dy = 0
 
-    pert = 1e-2 # keep perturbation to single variable for now
+    pert = 1#1e-2 # keep perturbation to single variable for now
     print "Calculating iPRC via direct method for perturbations in the x direction..."
     x_prc = np.array([
             glass2d_phase_reset(phi, fixedpts, dx=pert, dy=0)
@@ -397,10 +398,10 @@ def main():
     #mp.figure()
     plt.title('iPRC of 2D Glass Network (Inhibitory Feedback): Analytical vs Direct')
     #mp.title('iPRC of 2D Glass Network (Inhibitory Feedback): Analytical vs Direct')
-    p2, = axes2.plot(np.linspace(0,1,len(adjoint_solx)),adjoint_soly*(math.pi/2.),color='.5',lw=2) # analytic
-    p1, = axes2.plot(np.linspace(0,1,len(adjoint_soly)),adjoint_solx*(math.pi/2.),color='b',lw=2) 
-    p4, = axes2.plot(np.linspace(0,1,total_perts),y_prc/pert,marker='o',linestyle='None',color='.5',markeredgecolor='.5') # direct
-    p3, = axes2.plot(np.linspace(0,1,total_perts),x_prc/pert,'bo')
+    p2, = axes2.plot(np.linspace(0,1,len(adjoint_solx)),adjoint_soly,color='.5',lw=2) # analytic
+    p1, = axes2.plot(np.linspace(0,1,len(adjoint_soly)),adjoint_solx,color='b',lw=2) 
+    p4, = axes2.plot(np.linspace(0,1,total_perts),y_prc/pert/(2*math.pi),marker='o',linestyle='None',color='.5',markeredgecolor='.5') # direct
+    p3, = axes2.plot(np.linspace(0,1,total_perts),x_prc/pert/(2*math.pi),'bo')
     mp.legend([p1,p2,p3,p4],['Adjoint x', 'Adjoint y', 'Direct x','Direct y'])
     #mp.xlim((0,1))
     #mp.ylim((0,1))

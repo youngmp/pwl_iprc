@@ -8,6 +8,7 @@ import tempfile
 
 import numpy as np
 
+from scipy.interpolate import interp1d
 from scipy.integrate import odeint
 from matplotlib import rc
 rc('text', usetex=True)
@@ -15,6 +16,7 @@ rc('font', family='serif', serif=['Computer Modern Roman'])
 import matplotlib
 matplotlib.rcParams['text.latex.preamble'] = [r'\boldmath \usepackage{bm}']
 from matplotlib import pyplot as plt
+import matplotlib.pylab as mp
 
 from matplotlib.patches import Circle, PathPatch
 import mpl_toolkits.mplot3d.art3d as art3d
@@ -23,6 +25,11 @@ import mpl_toolkits.mplot3d.art3d as art3d
 #draw a vector
 from matplotlib.patches import FancyArrowPatch
 from mpl_toolkits.mplot3d import proj3d
+
+import pw_const as pwc
+from xppcall import xpprun
+
+pi = np.pi
 
 class Arrow3D(FancyArrowPatch):
     def __init__(self, xs, ys, zs, *args, **kwargs):
@@ -1288,9 +1295,296 @@ def tlnet_fig():
     plt.tight_layout()
 
     return fig
+
+
+def oct_domain_fig():
+    b = np.sqrt(2)
+    a = np.sqrt(2)-1
+    c = 1./b
+    d = 1./a
+
+    lw=1
+    color='gray'
+
+
+    fig = plt.figure()
+
+    # domain
+    ax = fig.add_subplot(111)
     
+    x = a + np.arange(0,10)
+    y = x-np.sqrt(2)
+    ax.plot(x,y,color,lw=lw)
+
+    x = -a + np.arange(0,10)
+    y = -np.ones(len(x))
+    ax.plot(x,y,color,lw=lw)
+
+    x = np.arange(-1,10)
+    y = -x-np.sqrt(2)
+    ax.plot(x,y,color,lw=lw)
+
+    y = a-np.arange(0,10)
+    x = -np.ones(len(y))
+    ax.plot(x,y,color,lw=lw)
+
+    x = -a-np.arange(0,10)
+    y = x + np.sqrt(2)
+    ax.plot(x,y,color,lw=lw)
+
+    x = a-np.arange(0,10)
+    y = np.ones(len(x))
+    ax.plot(x,y,color,lw=lw)
+
+    x = np.arange(1,-10,-1)
+    y = -x + np.sqrt(2)
+    ax.plot(x,y,color,lw=lw)
+    
+    y = -a + np.arange(0,10)
+    x = np.ones(len(y))
+    ax.plot(x,y,color,lw=lw)
+
+
+    # solutions
+
+    # example trajectory 1 inside
+    npa,vn = xpprun('limit_cycle_pw_const_coupled.ode',
+                    inits={'x1':-1+.5,'y1':2.41421-.5},
+                    parameters={'meth':'euler',
+                                'dt':.001,
+                                'eps':0.,
+                                'total':1},
+                    clean_after=True)
+    
+    t = npa[:,0]
+    vals = npa[:,1:3]
+    ax.plot(vals[:,0],vals[:,1],lw=1,color='blue')
+    arrowx1 = vals[int(len(t)/16.),0]
+    arrowy1 = vals[int(len(t)/16.),1]
+    ax.arrow(arrowx1,arrowy1,.1,0.,head_width=0.1,fc='blue',ec='blue')
+
+    # example trajectory 2 outisde
+    npa,vn = xpprun('limit_cycle_pw_const_coupled.ode',
+                    inits={'x1':-1-.5,'y1':2.41421+.5},
+                    parameters={'meth':'euler',
+                                'dt':.001,
+                                'eps':0.,
+                                'total':1.2},
+                    clean_after=True)
+    
+    t = npa[:,0]
+    vals = npa[:,1:3]
+    ax.plot(vals[:,0],vals[:,1],lw=1,color='red')
+    arrowx1 = vals[int(len(t)/16.),0]
+    arrowy1 = vals[int(len(t)/16.),1]
+    ax.arrow(arrowx1,arrowy1,.1,0.,head_width=0.1,fc='red',ec='red')
+
+
+    # limit cycle
+    t,lc = pwc.oct_lc()
+    ax.plot(lc[:,0],lc[:,1],color='purple',lw=2)
+
+
+    # first arrow
+    arrowx1 = lc[int(len(t)/16.),0]
+    arrowy1 = lc[int(len(t)/16.),1]
+    ax.arrow(arrowx1,arrowy1,.1,0.,head_width=0.15,fc='purple',ec='purple')
+
+    # second arrow 
+    arrowx2 = lc[int(len(t)*(5./8.-1./16)),0]
+    arrowy2 = lc[int(len(t)*(5./8.-1./16)),1]
+    ax.arrow(arrowx2,arrowy2,-.1,0.,head_width=0.15,fc='purple',ec='purple')
+
+
+    # zero phase label
+    ax.annotate(r'$\theta = 0$',
+                xy=(1., 1), xycoords='data',
+                xytext=(15,-15), textcoords='offset points',
+                arrowprops=dict(arrowstyle='->',
+                                connectionstyle='angle,angleA=180,angleB=130,rad=10')
+            )
+
+    
+    # region labels
+    ax.text(1-.3,1,'1.')
+    ax.text(1+.3,0.+.3,'2.')
+    ax.text(1.05,-1.+.25,'3.')
+    ax.text(0.3,-1.-.3,'4.')
+    ax.text(-0.7,-1-.2,'5.')
+    ax.text(-1-0.3,-.3,'6.')
+    ax.text(-1-0.1,.7,'7.')
+    ax.text(-.3,1.3,'8.')
+
+    #ax.plot()
+
+    ax.set_xlim(-3,3)
+    ax.set_ylim(-3,3)
+    #ax.axis('off')
+    ax.set_xticks([])
+    ax.set_yticks([])
+
+
+
+    return fig
+
+
+def oct_coupled_fig():
+    
+    fig = plt.figure(figsize=(10,3))
+
+    simt = np.loadtxt('oct_ex_x1.dat')[:,0]
+    x1 = np.loadtxt('oct_ex_x1.dat')[:,1]
+    y1 = np.loadtxt('oct_ex_y1.dat')[:,1]
+
+    x2 = np.loadtxt('oct_ex_x2.dat')[:,1]
+    y2 = np.loadtxt('oct_ex_y2.dat')[:,1]
+
+    # LCs
+    lct = np.loadtxt('oct_x1.dat')[:,0]
+    lc1_table = np.loadtxt('oct_x1.dat')[:,1]
+    lc2_table = np.loadtxt('oct_y1.dat')[:,1]
+
+    ax1 = fig.add_subplot(131)
+
+
+    cutoff = int(5/.0001)
+    # LC 2 y coord, LC 1 y coord
+    ax1.plot(simt[:cutoff],y2[:cutoff],color='#8CD6FF',ls='--',dashes=(5,1))
+    ax1.plot(simt[:cutoff],y1[:cutoff],color='#FFBE8A')
+
+    # LC 2 x coord, LC 1 x coord
+    ax1.plot(simt[:cutoff],x2[:cutoff],color='#0072B2',ls='--',dashes=(5,1))
+    ax1.plot(simt[:cutoff],x1[:cutoff],color='#D55E00')
+
+    ax1.set_xlabel(r'$\bm{t}$')
+    ax1.set_ylim(-2.7,2.7)
+
+
+    ax2 = fig.add_subplot(132)
+    cutoff = int(95/.0001)
+    # LC 2 y coord, LC 1 y coord
+    ax2.plot(simt[cutoff:],y2[cutoff:],color='#8CD6FF',ls='--',dashes=(5,1))
+    ax2.plot(simt[cutoff:],y1[cutoff:],color='#FFBE8A')
+
+    # LC 2 x coord, LC 1 x coord
+    ax2.plot(simt[cutoff:],x2[cutoff:],color='#0072B2',ls='--',dashes=(5,1))
+    ax2.plot(simt[cutoff:],x1[cutoff:],color='#D55E00')
+
+    ax2.set_xlabel(r'$\bm{t}$')
+    ax2.set_ylim(-2.7,2.7)
+
+    ### H FUNCTION STUFF
+    #phis = np.linspace(0,2*math.pi,total_perts)
+    phi = np.linspace(0,1,1000)
+    prc = pwc.oct_phase_reset_analytic(phi)
+    
+    prc1 = interp1d(phi,prc[:,0])
+    prc2 = interp1d(phi,prc[:,1])
+    
+    # create lc lookup table
+    t,vals = pwc.oct_lc()
+    lc1 = interp1d(t,vals[:,0])
+    lc2 = interp1d(t,vals[:,1])
+
+    phi2 = np.linspace(0,1,100)
+    hvals = pwc.generate_h(phi2,lc1,lc2,prc1,prc2)
+    
+    h = interp1d(phi2,hvals)
+    
+    ax3 = fig.add_subplot(133)
+    t = np.linspace(0,100,10000)
+    sol = odeint(pwc.phase_rhs,.49,t,args=(h,))
+
+    
+    # EXTRACT PHASES
+    phase1 = np.zeros(len(simt))
+    phase2 = np.zeros(len(simt))
+
+    """
+    v1 = (lc1_table-x1[0])**2. + (lc2_table-y1[0])**2.
+    i1 = np.argmin(v1)
+    x1size = 1.*len(lc1_table)
+    phase1[0] = i1/x1size
+
+    v2 = (lc1_table-x2[0])**2. + (lc2_table-y2[0])**2.
+    i2 = np.argmin(v2)
+    phase2[0] = i2/x1size
+
+    for i in range(1,len(simt)):
+        v1 = (lc1_table-x1[i])**2. + (lc2_table-y1[i])**2.
+        i1 = np.argmin(v1)
+        phase1[i] = i1/x1size
+
+        v2 = (lc1_table-x2[i])**2. + (lc2_table-y2[i])**2.
+        i2 = np.argmin(v2)
+        phase2[i] = i2/x1size
+
+    """
+
+    v1 = np.arctan2(y1[0],x1[0])
+    phase1[0] = (v1+pi)/(2*np.pi)
+
+    v2 = np.arctan2(y2[0],x2[0])
+    phase2[0] = (v2+pi)/(2*np.pi)
+
+    for i in range(1,len(simt)):
+        v1 = np.arctan2(y1[i],x1[i])
+        phase1[i] = (v1+pi)/(2*np.pi)
+
+        v2 = np.arctan2(y2[i],x2[i])
+        phase2[i] = (v2+pi)/(2*np.pi)
+
+
+    """
+    crossings = ((y1[:-1] >= 0) * (y1[1:] < 0) 
+                 * (x1[1:] > 0))
+
+    crossings2 = ((y2[:-1] >= 0) * (y2[1:] < 0) 
+                 * (x2[1:] > 0))
+
+    crossing_times = simt[:-1][crossings][:1]
+    crossing_times2 = simt[:-1][crossings2]
+
+    crossing_phases = np.mod(crossing_times2-crossing_times+.5,1)-.5
+    print len(crossing_phases)
+    print len(crossings),len(crossings2)
+    print len(crossing_times),len(crossing_phases)
+    ax3.scatter(crossing_times2,crossing_phases)
+
+    """
+
+    phi = np.mod(phase1-phase2+.5,1)-.5
+    #ax3.scatter(simt[0:-1:50],phi[0:-1:50],color='black',label='Numerical Phase Difference')
+    ax3.scatter(simt[:-1:500],phi[:-1:500],color='black',label='Numerical Phase Difference')
+
+    ax3.plot(t,sol,color='#80bfff',lw=3,ls='--',dashes=(5,1))
+    ax3.set_ylabel(r'\textbf{Phase Difference}')
+    ax3.set_xlabel(r'$\bm{t}$')
+    ax3.set_ylim(-.01,.51)
+    ax3.set_xlim(0,100)
+    
+    plt.tight_layout()
+    #plt.show()
+
+    return fig
+
+def oct_prc():
+
+    phi = np.linspace(0,1,1000)
+    prc = pwc.oct_phase_reset_analytic(phi)
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+
+
+    ax.plot(phi,prc[:,1],lw=2,color='.5')
+    ax.plot(phi,prc[:,0],lw=3,color='black')
     
 
+    ax.set_xlabel(r'$\bm{t}$')
+
+
+    return fig
+    
 
 def generate_figure(function, args, filenames, title="", title_pos=(0.5,0.95)):
     tempfile._name_sequence = None;
@@ -1344,7 +1638,10 @@ def main():
     #glass_2d_prc_fig().savefig('glass_2d_prc_fig.pdf')
 
     figures = [
-        (tlnet_fig,[],['tlnet_fig.png','tlnet_fig.pdf'])
+        #(tlnet_fig,[],['tlnet_fig.png','tlnet_fig.pdf']),
+        #(oct_domain_fig,[],['oct_fig.pdf']),
+        #(oct_coupled_fig,[],['oct_coupled.pdf']),
+        (oct_prc,[],['oct_prc.pdf']),
     ]
     for fig in figures:
         generate_figure(*fig)

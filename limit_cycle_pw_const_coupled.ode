@@ -1,0 +1,45 @@
+# Piecewise constant dy1namical sy1stem with a limit cy1cle.
+# couple two together.
+
+x1'=16*(r1(x1,y1)*(1)+r2(x1,y1)*( c)+r3(x1,y1)*( 0)+r4(x1,y1)*(-c)+r5(x1,y1)*(-1)+r6(x1,y1)*(-c)+r7(x1,y1)*(0)+r8(x1,y1)*(c)+in(x1,y1))+eps*g*(x2-x1)
+y1'=16*(r1(x1,y1)*(0)+r2(x1,y1)*(-c)+r3(x1,y1)*(-1)+r4(x1,y1)*(-c)+r5(x1,y1)*( 0)+r6(x1,y1)*( c)+r7(x1,y1)*(1)+r8(x1,y1)*(c)+in(x1,y1))+eps*g*(y2-y1)
+
+x2'=16*(r1(x2,y2)*(1)+r2(x2,y2)*( c)+r3(x2,y2)*( 0)+r4(x2,y2)*(-c)+r5(x2,y2)*(-1)+r6(x2,y2)*(-c)+r7(x2,y2)*(0)+r8(x2,y2)*(c)+in(x2,y2))+eps*g*(x1-x2)
+y2'=16*(r1(x2,y2)*(0)+r2(x2,y2)*(-c)+r3(x2,y2)*(-1)+r4(x2,y2)*(-c)+r5(x2,y2)*( 0)+r6(x2,y2)*( c)+r7(x2,y2)*(1)+r8(x2,y2)*(c)+in(x2,y2))+eps*g*(y1-y2)
+
+
+in(x,y)=heav(1-x)*heav(x+1)*heav(1-y)*heav(y+1)*heav(y1-(-x-b))*heav((-x+b)-y)*heav(y-(x-b))*heav((x+b)-y)*x
+
+r1(x,y)=heav(x-(-y+b))*heav(1-x)
+r2(x,y)=heav(x-1)*heav((y+b)-x)
+r3(x,y)=heav(y+1)*heav(x-b-y)
+r4(x,y)=heav(y-(-x-b))*heav(-1-y)
+r5(x,y)=heav(x+1)*heav(-y-b-x)
+r6(x,y)=heav(x-(y-b))*heav(-1-x)
+r7(x,y)=heav(y-(x+b))*heav(1-y)
+r8(x,y)=heav(y-1)*heav((-x+b)-y)
+
+# diffusive coupling strength
+p eps=.01
+param g=5
+
+#param a=0.414213562373095
+param b=1.414213562373095
+param c=0.707106781186547
+p d=2.4142135623730945
+# parameters a=sqrt(2)-1, b=sqrt(2),c=1/b, d=1/a
+# limit cycle is octagon going through (1,1/a)
+
+# initial conditions giving synchronization
+#init x1=1,y1=2,x2=3,y2=0
+# initial conditions giving antisynchronization?
+init x1=2.41413,y1=0.999804,x2=-2.30248,y2=-1.10156
+
+@ nplot=2,xplot=t,yplot1=x1,yplot2=x2
+@ xlo=0,xhi=10,ylo=-3,yhi=3
+#@ xp=x1,yp=y1
+#@ xlo=-3,xhi=3,ylo=-3,yhi=3
+@ dt=.001
+@ total=10
+
+d
