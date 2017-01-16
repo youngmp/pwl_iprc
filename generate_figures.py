@@ -1580,8 +1580,8 @@ def oct_prc():
     ax.plot(phi,prc[:,1],lw=2,color='.5')
     ax.plot(phi,prc[:,0],lw=3,color='black')
     
-
-    ax.set_xlabel(r'$\bm{t}$')
+    ax.set_ylabel(r'$\bm{z(\theta)}$')
+    ax.set_xlabel(r'$\bm{\theta}$')
 
 
     return fig
@@ -1601,42 +1601,6 @@ def generate_figure(function, args, filenames, title="", title_pos=(0.5,0.95)):
 
 def main():
 
-    #glass_pert_dispacement_fig()
-    #glass_phase_fig()
-
-    #iris_mod_fig(.33)
-    #glass_2d_fig()
-    #iris_mod_prc_fig()
-
-    #glass_2d_prc_fig()
-    #nominal_biting_prc_fig(.01)
-
-    #nominal_biting_fig()
-    #nominal_biting_fig(.001)
-    #nominal_biting_fig(.0001)
-
-    #plt.show()
-    # single thread
-
-    """
-    iris_mod_fig(0., 0.2).savefig('iris_mod_a_fig.pdf')
-    iris_mod_fig(0.05, 0.2).savefig('iris_mod_b_fig.pdf')
-    iris_mod_fig(0.2, 0.2).savefig('iris_mod_c_fig.pdf')
-    iris_mod_fig(0.33, 0.2).savefig('iris_mod_d_fig.pdf')
-
-    glass_2d_fig().savefig('glass_2d_fig.pdf')
-    glass_phase_fig().savefig('glass_2d_phase_fig.pdf')
-    glass_pert_displacemnt_fig().savefig('glass_pert_displacement_fig.pdf')
-
-    """
-    #nominal_biting_fig().savefig('nominal_biting_fig_combined_test.pdf')
-    #nominal_biting_fig(.02).savefig('nominal_biting_fig1.pdf')
-    #nominal_biting_fig(.001).savefig('nominal_biting_fig2.pdf')
-
-
-    #iris_mod_prc_fig().savefig('iris_mod_prc_fig.pdf')
-    #nominal_biting_prc_fig(.01).savefig('nominal_biting_prc_fig.pdf')
-    #glass_2d_prc_fig().savefig('glass_2d_prc_fig.pdf')
 
     figures = [
         (glass_pert_displacemnt_fig,[],['fig1_glass_pert_displacement_fig.pdf']),
@@ -1654,24 +1618,8 @@ def main():
         (oct_prc,[],['fig12_oct_prc.pdf']),
         (oct_coupled_fig,[],['fig13_oct_coupled.pdf']),
     ]
-    for fig in figures:
-        generate_figure(*fig)
 
     """
-
-    figures = [
-        (iris_mod_fig, [0., 0.2], ['iris_a_fig.eps','iris_a_fig.pdf']),
-        (iris_mod_fig, [0.05, 0.2], ['iris_b_fig.eps','iris_b_fig.pdf']),
-        (iris_mod_fig, [0.2, 0.2], ['iris_c_fig.eps','iris_c_fig.pdf']),
-        (iris_mod_fig, [0.255, 0.2], ['iris_d_fig.eps','iris_d_fig.pdf']),
-        #(iris_mod_prc_fig, [], ['iris_prc_fig.eps','iris_prc_fig.pdf']),
-        (glass_2d_fig, [], ['glass_2d_fig.eps', 'glass_2d_fig.pdf']),
-        (nominal_biting_prc_fig,[.01],
-         ['nominal_biting_prc_fig1.eps','nominal_biting_prc_fig1.pdf']),
-        (nominal_biting_prc_fig,[.001],
-         ['nominal_biting_prc_fig2.eps','nominal_biting_prc_fig2.pdf']),
-        ]
-
     # set up one process per figure
     processes = [multiprocessing.Process(target=generate_figure, args=args)
             for args in figures]
