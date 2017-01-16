@@ -1307,7 +1307,7 @@ def oct_domain_fig():
     color='gray'
 
 
-    fig = plt.figure()
+    fig = plt.figure(figsize=(5,5))
 
     # domain
     ax = fig.add_subplot(111)
@@ -1398,22 +1398,23 @@ def oct_domain_fig():
 
     # zero phase label
     ax.annotate(r'$\theta = 0$',
-                xy=(1., 1), xycoords='data',
-                xytext=(15,-15), textcoords='offset points',
+                fontsize=20,
+                xy=(1., .9), xycoords='data',
+                xytext=(-70,-50), textcoords='offset points',
                 arrowprops=dict(arrowstyle='->',
-                                connectionstyle='angle,angleA=180,angleB=130,rad=10')
+                                connectionstyle='angle,angleA=90,angleB=220,rad=10')
             )
 
     
     # region labels
-    ax.text(1-.3,1,'1.')
-    ax.text(1+.3,0.+.3,'2.')
-    ax.text(1.05,-1.+.25,'3.')
-    ax.text(0.3,-1.-.3,'4.')
-    ax.text(-0.7,-1-.2,'5.')
-    ax.text(-1-0.3,-.3,'6.')
-    ax.text(-1-0.1,.7,'7.')
-    ax.text(-.3,1.3,'8.')
+    ax.text(1-.35,1,'1.',fontsize=20)
+    ax.text(1+.3,0.+.3,'2.',fontsize=20)
+    ax.text(1.05,-1.+.25,'3.',fontsize=20)
+    ax.text(0.3,-1.-.35,'4.',fontsize=20)
+    ax.text(-0.8,-1-.2,'5.',fontsize=20)
+    ax.text(-1-0.35,-.35,'6.',fontsize=20)
+    ax.text(-1-0.2,.65,'7.',fontsize=20)
+    ax.text(-.4,1.3,'8.',fontsize=20)
 
     #ax.plot()
 
@@ -1638,10 +1639,20 @@ def main():
     #glass_2d_prc_fig().savefig('glass_2d_prc_fig.pdf')
 
     figures = [
-        #(tlnet_fig,[],['tlnet_fig.png','tlnet_fig.pdf']),
-        #(oct_domain_fig,[],['oct_fig.pdf']),
-        #(oct_coupled_fig,[],['oct_coupled.pdf']),
-        (oct_prc,[],['oct_prc.pdf']),
+        (glass_pert_displacemnt_fig,[],['fig1_glass_pert_displacement_fig.pdf']),
+        (glass_2d_fig,[],['fig4_glass_2d_fig.pdf']),
+        (glass_pert_displacement_fig,[],['fig5_glass_pert_displacement_fig.pdf']),
+        (iris_mod_fig,[0., 0.2],['fig6_iris_mod_a_fig.pdf']),
+        (iris_mod_fig,[0.05, 0.2],['fig6_iris_mod_b_fig.pdf']),
+        (iris_mod_fig,[0.2, 0.2],['fig6_iris_mod_c_fig.pdf']),
+        (iris_mod_fig,[0.33, 0.2],['fig6_iris_mod_d_fig.pdf']),
+        (iris_mod_prc_fig,[],['fig7_iris_mod_prc_fig.pdf']),
+        (nominal_biting_fig,[],['fig8_nominal_biting_fig_comined.pdf']),
+        (nominal_biting_prc_fig,[.01],['fig9_nominal_biting_prc_fig.pdf']),
+        (tlnet_fig,[],['fig10_tlnet_fig.png','tlnet_fig.pdf']),
+        (oct_domain_fig,[],['fig11_oct_fig.pdf']),
+        (oct_prc,[],['fig12_oct_prc.pdf']),
+        (oct_coupled_fig,[],['fig13_oct_coupled.pdf']),
     ]
     for fig in figures:
         generate_figure(*fig)
