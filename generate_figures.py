@@ -1641,7 +1641,7 @@ def main():
     figures = [
         (glass_pert_displacemnt_fig,[],['fig1_glass_pert_displacement_fig.pdf']),
         (glass_2d_fig,[],['fig4_glass_2d_fig.pdf']),
-        (glass_pert_displacement_fig,[],['fig5_glass_pert_displacement_fig.pdf']),
+        (glass_2d_prc_fig,[],['fig5_glass_2d_prc_fig.pdf']),
         (iris_mod_fig,[0., 0.2],['fig6_iris_mod_a_fig.pdf']),
         (iris_mod_fig,[0.05, 0.2],['fig6_iris_mod_b_fig.pdf']),
         (iris_mod_fig,[0.2, 0.2],['fig6_iris_mod_c_fig.pdf']),
