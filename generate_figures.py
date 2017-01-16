@@ -109,7 +109,7 @@ def iris_mod_fig(a, border=1., label_theta0=False,
 
     elif a >= .255:
         x0 = [-a/2, a/2 + Y - .2]
-        t = np.linspace(0,100,maxsteps)
+        t = np.linspace(0,50,maxsteps)
         vals = odeint(iris_modified.iris_mod,x0,t,args=(a,saddle_val))    
 
     axes.annotate(r'',
