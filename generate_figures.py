@@ -285,6 +285,244 @@ def glass_2d_fig():
     return fig
 
 
+def glass_2d_fig_prc_combined():
+
+    fig = plt.figure(figsize=(6,3))
+    axes = fig.add_subplot(121)
+    #axes = plt.axes([.1,.1,.8,.8])
+
+    # fixed points
+    a1,b1 = [-5.,11.]
+    a2,b2 = [-10.,-4.]
+    a3,b3 = [6.,-10.]
+    a4,b4 = [10.,5.]
+
+    # consoldate fixed points
+    fixedpts = (a1,b1,a2,b2,a3,b3,a4,b4)
+    
+    maxsteps = 100000
+    # total integration time
+    T = glass_pasternack_2d.ToF(0,fixedpts)+\
+        glass_pasternack_2d.ToF(1,fixedpts)+\
+        glass_pasternack_2d.ToF(2,fixedpts)+\
+        glass_pasternack_2d.ToF(3,fixedpts)
+    t = np.linspace(0,T,maxsteps)
+    
+    # draw axes
+    axes.plot([-15,15],[0,0],color='0.5') # x-axis
+    axes.plot([0,0],[-15,15],color='0.5') # y-axis
+    axes.text(11,.5,'x')
+    axes.text(-1,11,'y')
+
+    # calculate inside trajectory
+    yin = [.5,0.]
+    valsin = odeint(glass_pasternack_2d.D2Attractor,
+                    yin,
+                    1.5*t,
+                    args=((a1,b1),(a2,b2),(a3,b3),(a4,b4)))
+
+
+    # calculate outside trajectory
+    yout = [10.,0.]
+    valsout = odeint(glass_pasternack_2d.D2Attractor,
+                     yout,
+                     1.5*t,
+                     args=((a1,b1),(a2,b2),(a3,b3),(a4,b4)))
+
+
+    # calculate limit cycle
+    lcval = odeint(glass_pasternack_2d.D2Attractor,
+                   [glass_pasternack_2d.LCinit(0,fixedpts),0],
+                   t,
+                   args=((a1,b1),(a2,b2),(a3,b3),(a4,b4)))
+
+    # draw fixed points and lines to them from limit cycle
+    axes.plot([0,a1],[glass_pasternack_2d.LCinit(1,fixedpts),b1],'k--')
+    axes.plot([glass_pasternack_2d.LCinit(2,fixedpts),a2],[0,b2],'k--')
+    axes.plot([0,a3],[glass_pasternack_2d.LCinit(3,fixedpts),b3],'k--')
+    axes.plot([glass_pasternack_2d.LCinit(0,fixedpts),a4],[0,b4],'k--')
+
+    # draw theta = 0
+    axes.annotate(r'$\theta = 0$',
+                  xy=(glass_pasternack_2d.LCinit(0,fixedpts),0), xycoords='data',
+                  xytext=(15,-15), textcoords='offset points',
+                  ha='left',
+                  arrowprops=dict(arrowstyle='->',
+                                  connectionstyle='arc3,rad=-.5')
+                  )
+
+
+    # draw dashed line from outer trajectory in region 1 to fixed point (a_1,b_1)
+    crossingsout = ((valsout[:-1,0] > 0) * (valsout[1:,0] <= 0) *
+                 (valsout[1:,1]>0))
+    axes.plot([0,a1],[np.amax(valsout[1:,1][crossingsout]),b1],ls='--',color='.6')
+
+    # draw dashed line from inner trajectory in region 1 to fixed point (a_1,b_1)
+    crossingsin = ((valsin[:-1,0] > 0) * (valsin[1:,0] <= 0) *
+                 (valsin[1:,1]>0))
+    axes.plot([0,a1],[np.amin(valsin[1:,1][crossingsin]),b1],ls='--',color='.6')
+
+
+    # plot inside
+    axes.plot(valsin[:,0],valsin[:,1],lw=1,color='b')
+
+    # plot outside
+    axes.plot(valsout[:,0],valsout[:,1],lw=1,color='r')
+
+    # plot limit cycle
+    axes.plot(lcval[:,0],lcval[:,1],lw=3,color='purple')
+
+
+    # draw fixed point labels
+    fixedptlist = [[a1,b1],[a2,b2],[a3,b3],[a4,b4]]
+    valign = ['top','top','bottom','bottom']
+    halign = ['right','left','left','right']
+    for i in range(len(fixedptlist)):
+        axes.plot(fixedptlist[i][0],fixedptlist[i][1],'ko',markeredgecolor='k')
+        axes.text(fixedptlist[i][0],fixedptlist[i][1],'$(a_'+str(i+1)+',b_'+str(i+1)+')$',
+                  horizontalalignment=halign[i],verticalalignment=valign[i])
+
+    # draw trajectory arrows
+
+    # limit cycle:
+    # index of time crossing:
+    lc_time_choice = .16*T
+    best_idx = np.argmin(np.abs(t - lc_time_choice))
+
+    x = lcval[:,0][best_idx]
+    y = lcval[:,1][best_idx]
+    dx = lcval[:,0][best_idx] - lcval[:,0][best_idx-1]
+    dy = lcval[:,1][best_idx] - lcval[:,1][best_idx-1]
+    axes.arrow(x,y,dx,dy,
+               head_width=.6,
+               head_length=.6,
+               fc='purple',
+               ec='purple',
+               )
+
+    
+    # inside trajectory
+    inside_time_choice = .3*T
+    best_idx = np.argmin(np.abs(t - inside_time_choice))
+
+    x = valsin[:,0][best_idx]
+    y = valsin[:,1][best_idx]
+    dx = valsin[:,0][best_idx] - valsin[:,0][best_idx-1]
+    dy = valsin[:,1][best_idx] - valsin[:,1][best_idx-1]
+    axes.arrow(x,y,dx,dy,
+               head_width=.3,
+               head_length=.3,
+               fc='blue',
+               ec='blue',
+               )
+
+
+    # outside trajectory
+    outside_time_choice = .2*T
+    best_idx = np.argmin(np.abs(t - outside_time_choice))
+
+    x = valsout[:,0][best_idx]
+    y = valsout[:,1][best_idx]
+    dx = valsout[:,0][best_idx] - valsout[:,0][best_idx-1]
+    dy = valsout[:,1][best_idx] - valsout[:,1][best_idx-1]
+    axes.arrow(x,y,dx,dy,
+               head_width=.3,
+               head_length=.3,
+               fc='red',
+               ec='red',
+               )
+
+
+    # set limits and clean up axes
+    axes.set_xlim(-12,12)
+    axes.set_ylim(-12,12)
+    axes.set_xticks([])
+    axes.set_yticks([])
+
+    #return fig
+
+
+
+    # create figure
+    #fig = plt.figure(figsize=(6,5))
+    #axes = fig.add_axes([0.15, 0.1, 0.75, 0.8])
+    axes2 = fig.add_subplot(122)
+
+    # define parameters
+
+    a1,b1 = [-5.,11.]
+    a2,b2 = [-10.,-4.]
+    a3,b3 = [6.,-10.]
+    a4,b4 = [10.,5.]
+
+    """
+    # homogenous parameters lead to very good fits.
+    a1,b1 = [-5.,10.]
+    a2,b2 = [-10.,-5.]
+    a3,b3 = [5.,-10.]
+    a4,b4 = [10.,5.]
+    """
+    fixedpts = (a1,b1,a2,b2,a3,b3,a4,b4)
+
+    # calculate analytic adjoint
+    adjoint_solx,adjoint_soly = glass_pasternack_2d.glass_2d_phase_reset_analytic(fixedpts)
+    # plot
+    a_plot_phis = np.linspace(0,1,len(adjoint_solx))
+    axes2.plot(a_plot_phis, adjoint_soly,color='.5')
+
+    total_perts = 40
+    pert = 1e-2
+    phis = np.linspace(0,2*math.pi,total_perts)
+    
+    #scale
+    scale = 1./(2.*math.pi)
+
+    # calculate iPRC for perturbations in the x direction
+    x_prc = np.array([
+            glass_pasternack_2d.glass2d_phase_reset(phi, fixedpts, dx=pert, dy=0)
+            for phi in phis
+            ])
+    if pert != 0.0:
+        x_prc = x_prc/pert
+
+    # calculate iPRC for perturbations in the y direction
+    y_prc = np.array([
+            glass_pasternack_2d.glass2d_phase_reset(phi, fixedpts, dx=0, dy=pert)
+            for phi in phis
+            ])
+    if pert != 0.0:
+        y_prc = y_prc/pert
+        
+    # plot numerical y-iPRC
+    n_plot_phis = np.linspace(0,1,total_perts)
+    axes2.plot(n_plot_phis,y_prc*scale,marker='o',
+              linestyle='None',color='.5',
+              markeredgecolor='.5',ms=3.)
+
+    # plot analytic x-iPRC then numerical x-iPRC
+    axes2.plot(a_plot_phis, adjoint_solx,color='k')
+    axes2.plot(n_plot_phis,x_prc*scale,'bo',ms=3.)
+
+
+    # set font size
+    for item in ([axes2.title, axes2.xaxis.label, axes2.yaxis.label] +
+                 axes2.get_xticklabels() + axes2.get_yticklabels()):
+        item.set_fontsize(15)
+
+    axes2.set_ylim([np.amin([y_prc*scale,x_prc*scale])-.025,np.amax([y_prc*scale,x_prc*scale])+.025])
+    axes2.set_ylabel(r'$z(\theta)$')
+    axes2.set_xlabel(r'$\theta$')
+
+    axes2.set_xlim(0,1)
+
+    axes.set_title(r'(a)',loc='left')
+    axes2.set_title(r'(b)',loc='left')
+
+    plt.tight_layout()
+
+    return fig
+
+
 def nominal_biting_fig(a_vals=[.02,.001],rho=3.,maxsteps=10000):
     fig = plt.figure(figsize=(10,5))
 
@@ -505,8 +743,9 @@ def nominal_biting_prc_fig(a):
     # coupling constant
     rho = 3.
 
-    fig = plt.figure(figsize=(6,5))
-    axes = plt.axes([.15,.1,.75,.8])
+    fig = plt.figure(figsize=(6,2))
+    axes = fig.add_subplot(111)
+    #axes = plt.axes([.15,.1,.75,.8])
 
     t1,t2,t3,init12,init23,init31,T = nominal_biting.LCinit(a=a,rho=rho,return_period=True)
     adjoint_solx,adjoint_soly,adjoint_solz = nominal_biting.pwl_biting_phase_reset_analytic(a,
@@ -589,7 +828,12 @@ def nominal_biting_prc_fig(a):
         item.set_fontsize(15)
     axes.set_ylabel(r'$z(\theta)$')
     axes.set_xlabel(r'$\theta$')
+    
+    axes.tick_params(axis='x',which='major',pad=1)
     #mp.legend([p1,p2,p3,p4,p5,p6],['Adjoint x','Adjoint y','Adjoint z','Direct x','Direct y','Direct z'])
+
+    plt.tight_layout()
+
     return fig
 
 def draw_fancy_iris_mod(ax, a=0., saddle_val=[], X=1., Y=1.,
@@ -1139,6 +1383,131 @@ def glass_pert_displacemnt_fig(phase_of_pert=1.5*math.pi-.5, num_cycles=3.5, per
     return fig
 
 
+def glass_pert_displacemnt_fig(phase_of_pert=1.5*math.pi-.5, num_cycles=3.5, pert_size=2.):
+    """
+    show an example of asymptotic effects of perturbations
+    """
+    
+    fig = plt.figure(figsize=(7,5))
+    axes = fig.add_axes([0.1, 0.1, 0.8, 0.8])
+    # make sure that these parameters are the same between 
+    # all the glass figures, i.e., glass_2d_prc_fig
+    # and glass_2d_fig.
+
+    # fixed points
+    a1,b1 = [-5.,11.]
+    a2,b2 = [-10.,-4.]
+    a3,b3 = [6.,-10.]
+    a4,b4 = [10.,5.]    
+
+    # consolidate fixed points for use in functions
+    fixedpts = (a1,b1,a2,b2,a3,b3,a4,b4)
+
+    # find period and limit cycle initial condition
+    T = glass_pasternack_2d.ToF(0,fixedpts)+\
+        glass_pasternack_2d.ToF(1,fixedpts)+\
+        glass_pasternack_2d.ToF(2,fixedpts)+\
+        glass_pasternack_2d.ToF(3,fixedpts)
+
+    y0 = glass_pasternack_2d.LCinit(0,fixedpts)
+
+    # get perturbed trajectory
+    prc_dict = glass_pasternack_2d.glass2d_phase_reset(phase_of_pert,fixedpts,
+                                                       dx=pert_size,steps_per_cycle=10000,
+                                                       num_cycles=num_cycles,
+                                                       return_intermediates=True)
+
+    # calculate the "would-have-been' limit cycle
+    maxsteps = 10000
+    maxtime = prc_dict['t2'][-1]
+    t = np.linspace(prc_dict['t1'][-1],maxtime,maxsteps)
+
+    vals_lc = odeint(glass_pasternack_2d.D2Attractor,
+                     prc_dict['vals1'][-1],
+                     t,
+                     args=((a1,b1),(a2,b2),(a3,b3),(a4,b4)))
+    
+    # plot 'would-have-been' limit cycle 
+    axes.plot(t,vals_lc[:,0],color='.5',ls='--')
+
+    # plot first portion of limit cycle through t1
+    # and plot perturbed limit cycle trajectory through t2
+    axes.plot(prc_dict['t1'],prc_dict['vals1'][:,0],color='k',lw=2)
+    #axes.plot([prc_dict['t1'][-1],prc_dict['t2'][0]],
+    #          [prc_dict['vals1'][:,0][-1],prc_dict['vals2'][:,0][0]],color='k',lw=2)
+    axes.plot(prc_dict['t2'],prc_dict['vals2'][:,0],color='k',lw=2)
+
+    # draw perturbation
+    axes.annotate('',
+                  #xy=(prc_dict['t1'][-1],prc_dict['vals1'][:,0][-1]-2*pert_size),
+                  xy=(prc_dict['t2'][0],prc_dict['vals2'][:,0][0]),
+                  xycoords='data',
+                  #xytext=(prc_dict['t1'][-1],prc_dict['vals1'][:,0][-1]-3*pert_size),textcoords='data',
+                  xytext=(prc_dict['t1'][-1],prc_dict['vals1'][:,0][-1]),textcoords='data',
+                  va='center',ha='center',
+                  arrowprops=dict(arrowstyle="simple",
+                                  connectionstyle="angle3",
+                                  color='red',
+                                  fc='w'),
+                  )
+    # label perturbation
+    """
+    axes.annotate('Impulse',
+                  #xy=(prc_dict['t1'][-1],prc_dict['vals1'][:,0][-1]-2*pert_size),
+                  xy=(prc_dict['t2'][0],prc_dict['vals2'][:,0][0]),
+                  xycoords='data',
+                  #xytext=(prc_dict['t1'][-1],prc_dict['vals1'][:,0][-1]-3*pert_size),textcoords='data',
+                  xytext=(prc_dict['t1'][-1]-pert_size/16.,prc_dict['vals1'][:,0][-1]+pert_size/2.),textcoords='data',
+                  va='center',ha='right',
+                  #arrowprops=dict(arrowstyle="simple",
+                  #                connectionstyle="arc3",
+                  #                color='red'),
+                  )
+                  
+    """
+
+    # draw arrows showing phase difference
+    final_cross_time_pert = prc_dict['crossing_times'][-1]
+    crossing_idx = prc_dict['crossings']
+    one_max_pert_val = prc_dict['vals2'][:,0][crossing_idx][-1]
+    final_cross_time_lc = int(num_cycles)*T
+    axes.annotate('',
+                  xy=(final_cross_time_pert,one_max_pert_val),
+                  xycoords='data',
+                  #xytext=(prc_dict['t1'][-1],prc_dict['vals1'][:,0][-1]-3*pert_size),textcoords='data',
+                  xytext=(final_cross_time_lc,one_max_pert_val),textcoords='data',
+                  va='center',ha='left',
+                  arrowprops=dict(arrowstyle="<->",
+                                  connectionstyle="arc3,rad=0.2",
+                                  ),
+                  )
+    
+    # draw phase difference label
+    x_position = (final_cross_time_pert + final_cross_time_lc)/2.
+    axes.annotate(r'$\Delta \theta$',
+                  size=15,
+                  xy=(x_position,one_max_pert_val+.3),
+                  xycoords='data',
+                  xytext=(x_position,one_max_pert_val+.3),textcoords='data',
+                  va='bottom',ha='center',
+                  )
+
+
+    # set axis limit
+    axes.set_xlim(0,prc_dict['t2'][-1])
+    
+    # set axis labels
+    axes.set_xlabel('$t$')
+    axes.set_ylabel('$x_1(t)$')
+
+    for item in ([axes.title, axes.xaxis.label, axes.yaxis.label] +
+                 axes.get_xticklabels() + axes.get_yticklabels()):
+        item.set_fontsize(15)
+
+
+    return fig
+
+
 def tlnet_fig():
     t1 = np.loadtxt('tlnet_phase_and_full_t.txt')
     tlnet_full1 = np.loadtxt('tlnetphase_full.txt')
@@ -1160,21 +1529,21 @@ def tlnet_fig():
     # first 20 time units of ex 1
 
     # LC 2
-    ax1.plot(t1[:cutoff],tlnetsol1[5,:cutoff],color='#8CD6FF',lw=2,ls='--',dashes=(5,1))
-    ax1.plot(t1[:cutoff],tlnetsol1[4,:cutoff],color='#40A8E3',lw=3,ls='--',dashes=(5,1))
+    #ax1.plot(t1[:cutoff],tlnetsol1[5,:cutoff],color='#8CD6FF',lw=2,ls='--',dashes=(5,1))
+    #ax1.plot(t1[:cutoff],tlnetsol1[4,:cutoff],color='#40A8E3',lw=3,ls='--',dashes=(5,1))
 
 
     # LC 1
-    ax1.plot(t1[:cutoff],tlnetsol1[2,:cutoff],color='#FFBE8A',lw=2)
-    ax1.plot(t1[:cutoff],tlnetsol1[1,:cutoff],color='#EB8D42',lw=3)
+    #ax1.plot(t1[:cutoff],tlnetsol1[2,:cutoff],color='#FFBE8A',lw=2)
+    #ax1.plot(t1[:cutoff],tlnetsol1[1,:cutoff],color='#EB8D42',lw=3)
 
 
     ax1.plot(t1[:cutoff],tlnetsol1[3,:cutoff],color='#0072B2',lw=4,ls='--',dashes=(5,1)) # LC 2
     ax1.plot(t1[:cutoff],tlnetsol1[0,:cutoff],color='#D55E00',lw=4) # LC 1
 
-    ax1.set_ylabel(r'\textbf{Activity}',fontsize=20)
+    ax1.set_ylabel(r'\textbf{Activity (Start)}',fontsize=20)
     ax1.set_xlabel(r'\textbf{t}',fontsize=20)
-    ax1.set_title(r'(a)',x=0,y=1.05,fontsize=20)
+    ax1.set_title(r'(a)',loc='left',fontsize=20)
 
     # set tick label font size
     for tick in ax1.xaxis.get_major_ticks():
@@ -1189,20 +1558,20 @@ def tlnet_fig():
     # first 20 time units of ex2
 
     # LC 2
-    ax2.plot(t2[:cutoff],tlnetsol2[5,:cutoff],color='#8CD6FF',lw=2,ls='--',dashes=(5,1))
-    ax2.plot(t2[:cutoff],tlnetsol2[4,:cutoff],color='#40A8E3',lw=3,ls='--',dashes=(5,1))
+    #ax2.plot(t2[:cutoff],tlnetsol2[5,:cutoff],color='#8CD6FF',lw=2,ls='--',dashes=(5,1))
+    #ax2.plot(t2[:cutoff],tlnetsol2[4,:cutoff],color='#40A8E3',lw=3,ls='--',dashes=(5,1))
 
 
     # LC 1
-    ax2.plot(t2[:cutoff],tlnetsol2[2,:cutoff],color='#FFBE8A',lw=2)
-    ax2.plot(t2[:cutoff],tlnetsol2[1,:cutoff],color='#EB8D42',lw=3)
+    #ax2.plot(t2[:cutoff],tlnetsol2[2,:cutoff],color='#FFBE8A',lw=2)
+    #ax2.plot(t2[:cutoff],tlnetsol2[1,:cutoff],color='#EB8D42',lw=3)
 
     
     ax2.plot(t2[:cutoff],tlnetsol2[3,:cutoff],color='#0072B2',lw=4,ls='--',dashes=(5,1)) #LC 2
     ax2.plot(t2[:cutoff],tlnetsol2[0,:cutoff],color='#D55E00',lw=4) #LC 1
 
     ax2.set_xlabel(r'\textbf{t}',fontsize=20)
-    ax2.set_title(r'(b)',x=0,y=1.05,fontsize=20)
+    ax2.set_title(r'(b)',loc='left',fontsize=20)
 
     for tick in ax2.xaxis.get_major_ticks():
         tick.label.set_fontsize(15) 
@@ -1213,19 +1582,18 @@ def tlnet_fig():
     ax3 = fig.add_subplot(323)
     # last 20 time units of ex 1
 
-    ax3.plot(t1[-cutoff:],tlnetsol1[5,-cutoff:],color='#8CD6FF',lw=2,ls='--',dashes=(5,1))
-    ax3.plot(t1[-cutoff:],tlnetsol1[4,-cutoff:],color='#40A8E3',lw=3,ls='--',dashes=(5,1))
+    #ax3.plot(t1[-cutoff:],tlnetsol1[5,-cutoff:],color='#8CD6FF',lw=2,ls='--',dashes=(5,1))
+    #ax3.plot(t1[-cutoff:],tlnetsol1[4,-cutoff:],color='#40A8E3',lw=3,ls='--',dashes=(5,1))
 
-
-    ax3.plot(t1[-cutoff:],tlnetsol1[2,-cutoff:],color='#FFBE8A',lw=2)
-    ax3.plot(t1[-cutoff:],tlnetsol1[1,-cutoff:],color='#EB8D42',lw=3)
+    #ax3.plot(t1[-cutoff:],tlnetsol1[2,-cutoff:],color='#FFBE8A',lw=2)
+    #ax3.plot(t1[-cutoff:],tlnetsol1[1,-cutoff:],color='#EB8D42',lw=3)
 
     ax3.plot(t1[-cutoff:],tlnetsol1[3,-cutoff:],color='#0072B2',lw=4,ls='--',dashes=(5,1)) # LC 2
     ax3.plot(t1[-cutoff:],tlnetsol1[0,-cutoff:],color='#D55E00',lw=4) # LC 1
 
-    ax3.set_ylabel(r'\textbf{Activity}',fontsize=20)
+    ax3.set_ylabel(r'\textbf{Activity (End)}',fontsize=20)
     ax3.set_xlabel(r'\textbf{t}',fontsize=20)
-    ax3.set_title(r'(c)',x=0,y=1.05,fontsize=20)
+    ax3.set_title(r'(c)',loc='left',fontsize=20)
 
     for tick in ax3.xaxis.get_major_ticks():
         tick.label.set_fontsize(15) 
@@ -1237,18 +1605,18 @@ def tlnet_fig():
     # last 20 time units of ex 2
 
     # LC 2
-    ax4.plot(t2[-cutoff:],tlnetsol2[5,-cutoff:],color='#8CD6FF',lw=2,ls='--',dashes=(5,1))
-    ax4.plot(t2[-cutoff:],tlnetsol2[4,-cutoff:],color='#40A8E3',lw=3,ls='--',dashes=(5,1))
+    #ax4.plot(t2[-cutoff:],tlnetsol2[5,-cutoff:],color='#8CD6FF',lw=2,ls='--',dashes=(5,1))
+    #ax4.plot(t2[-cutoff:],tlnetsol2[4,-cutoff:],color='#40A8E3',lw=3,ls='--',dashes=(5,1))
 
     # LC 1
-    ax4.plot(t2[-cutoff:],tlnetsol2[2,-cutoff:],color='#FFBE8A',lw=2)
-    ax4.plot(t2[-cutoff:],tlnetsol2[1,-cutoff:],color='#EB8D42',lw=3)
+    #ax4.plot(t2[-cutoff:],tlnetsol2[2,-cutoff:],color='#FFBE8A',lw=2)
+    #ax4.plot(t2[-cutoff:],tlnetsol2[1,-cutoff:],color='#EB8D42',lw=3)
 
     ax4.plot(t2[-cutoff:],tlnetsol2[3,-cutoff:],color='#0072B2',lw=4,ls='--',dashes=(5,1)) # LC 2
     ax4.plot(t2[-cutoff:],tlnetsol2[0,-cutoff:],color='#D55E00',lw=4) # LC 1
 
     ax4.set_xlabel(r'\textbf{t}',fontsize=20)
-    ax4.set_title(r'(d)',x=0,y=1.05,fontsize=20)
+    ax4.set_title(r'(d)',loc='left',fontsize=20)
 
     for tick in ax4.xaxis.get_major_ticks():
         tick.label.set_fontsize(15) 
@@ -1284,7 +1652,7 @@ def tlnet_fig():
     ax6.set_xlabel(r'\textbf{t}',fontsize=20)
     ax6.set_title(r'(f)',x=0,y=1.05,fontsize=20)
 
-    ax6.legend(loc='lower center')
+    ax6.legend(loc='lower center',fontsize=15)
 
     for tick in ax6.xaxis.get_major_ticks():
         tick.label.set_fontsize(15) 
@@ -1450,8 +1818,8 @@ def oct_coupled_fig():
 
     cutoff = int(5/.0001)
     # LC 2 y coord, LC 1 y coord
-    ax1.plot(simt[:cutoff],y2[:cutoff],color='#8CD6FF',ls='--',dashes=(5,1))
-    ax1.plot(simt[:cutoff],y1[:cutoff],color='#FFBE8A')
+    #ax1.plot(simt[:cutoff],y2[:cutoff],color='#8CD6FF',ls='--',dashes=(5,1))
+    #ax1.plot(simt[:cutoff],y1[:cutoff],color='#FFBE8A')
 
     # LC 2 x coord, LC 1 x coord
     ax1.plot(simt[:cutoff],x2[:cutoff],color='#0072B2',ls='--',dashes=(5,1))
@@ -1459,13 +1827,14 @@ def oct_coupled_fig():
 
     ax1.set_xlabel(r'$\bm{t}$')
     ax1.set_ylim(-2.7,2.7)
+    ax1.set_title('(a) Start')
 
 
     ax2 = fig.add_subplot(132)
     cutoff = int(95/.0001)
     # LC 2 y coord, LC 1 y coord
-    ax2.plot(simt[cutoff:],y2[cutoff:],color='#8CD6FF',ls='--',dashes=(5,1))
-    ax2.plot(simt[cutoff:],y1[cutoff:],color='#FFBE8A')
+    #ax2.plot(simt[cutoff:],y2[cutoff:],color='#8CD6FF',ls='--',dashes=(5,1))
+    #ax2.plot(simt[cutoff:],y1[cutoff:],color='#FFBE8A')
 
     # LC 2 x coord, LC 1 x coord
     ax2.plot(simt[cutoff:],x2[cutoff:],color='#0072B2',ls='--',dashes=(5,1))
@@ -1473,6 +1842,7 @@ def oct_coupled_fig():
 
     ax2.set_xlabel(r'$\bm{t}$')
     ax2.set_ylim(-2.7,2.7)
+    ax2.set_title('(b) End')
 
     ### H FUNCTION STUFF
     #phis = np.linspace(0,2*math.pi,total_perts)
@@ -1499,6 +1869,8 @@ def oct_coupled_fig():
     t = np.linspace(0,100,10000)
     sol = odeint(pwc.phase_rhs,.49,t,args=(h,))
     sol_bad = odeint(pwc.phase_rhs,.49,t,args=(h_bad,))
+    
+    ax3.set_title('(c)')
 
     
     # EXTRACT PHASES
@@ -1568,6 +1940,10 @@ def oct_coupled_fig():
     ax3.set_xlabel(r'$\bm{t}$')
     ax3.set_ylim(-.01,.51)
     ax3.set_xlim(0,100)
+
+    ax1.set_xlim(0,5)
+    ax2.set_xlim(95,100)
+
     
     plt.tight_layout()
     #plt.show()
@@ -1576,11 +1952,12 @@ def oct_coupled_fig():
 
 def oct_prc():
 
-    phi = np.linspace(0,1,1000)
-    prc = pwc.oct_phase_reset_analytic(phi)
     fig = plt.figure()
     ax = fig.add_subplot(111)
 
+
+    phi = np.linspace(0,1,1000)
+    prc = pwc.oct_phase_reset_analytic(phi)
 
     ax.plot(phi,prc[:,1],lw=2,color='.5')
     ax.plot(phi,prc[:,0],lw=3,color='black')
@@ -1590,6 +1967,142 @@ def oct_prc():
 
 
     return fig
+
+
+def h_functions_all():
+    """
+    generate h functions for PWC and morrison-curto model.
+    
+    first row: H of pwc, H of morrison-curto
+    second row: -2Hodd of pwc, -2Hodd of morrison-curto
+    """
+    
+    fig = plt.figure(figsize=(6,3))
+    ax11 = fig.add_subplot(221)
+    ax12 = fig.add_subplot(222)
+    ax21 = fig.add_subplot(223)
+    ax22 = fig.add_subplot(224)
+
+    # import necessary fns
+    
+    ## PWC system first
+    from pw_const import *
+    
+    # generate LC and iPRC
+    phi = np.linspace(0,1,500)
+    prc = oct_phase_reset_analytic(phi)
+    
+    prc1 = interp1d(phi,prc[:,0])
+    prc2 = interp1d(phi,prc[:,1])
+    
+    # create lc lookup table
+    t,vals = oct_lc()
+    lc1 = interp1d(t,vals[:,0])
+    lc2 = interp1d(t,vals[:,1])
+    
+    phi_pwc = np.linspace(0,1,100)
+    xmin_pwc = np.amin(phi_pwc)
+    xmax_pwc = np.amax(phi_pwc)
+
+    hvals = generate_h(phi_pwc,lc1,lc2,prc1,prc2)
+
+
+    ## plot H fun PWC
+    ax11.plot(phi_pwc,hvals,lw=2)
+    ax11.set_xlim(xmin_pwc,xmax_pwc)
+    ax11.set_ylabel(r'$H(\phi)$')
+    
+    ax11.set_title('(a) Piecewise Constant')
+
+    ax11.set_xticks([])
+
+    ## plot -2hodd fun PWC
+    h_pwc = interp1d(phi_pwc,hvals)
+    #ax21.set_title('Right Hand Side')
+    ax21.plot(phi_pwc,h_pwc(np.mod(-phi_pwc,phi_pwc[-1]))-h_pwc(phi_pwc),lw=2)
+    
+    # plot zero line
+    ax21.plot([xmin_pwc,xmax_pwc],[0,0],color='gray',zorder=-2)
+
+    # plot fixed points and indicate stability
+    ax21.scatter(.5,0,facecolors='white',edgecolors='black',zorder=3)
+    ax21.scatter(1.,0,color='black',zorder=3)
+    ax21.scatter(0,0,color='black',zorder=3)
+
+
+    ax21.annotate('',xy=(0.9,.0),xytext=(.85,0),arrowprops=dict(facecolor='black',shrink=0.05,width=2,headwidth=8))
+    ax21.annotate('',xy=(0.1,.0),xytext=(.15,0),arrowprops=dict(facecolor='black',shrink=0.05,width=2,headwidth=8))
+
+    ax21.set_xlabel(r'$\phi$')
+    ax21.set_ylabel(r'$H(-\phi)-H(\phi)$')
+    ax21.set_title('(c)')
+
+    ax21.set_xlim(xmin_pwc,xmax_pwc)
+
+
+    ## import morrison-curto data
+    
+    tarr = np.loadtxt('x1.dat')[:,0]
+    
+    lc1arr = np.loadtxt('x1.dat')[:,1]
+    lc2arr = np.loadtxt('x2.dat')[:,1]
+    lc3arr = np.loadtxt('x3.dat')[:,1]
+    
+    z1arr = np.loadtxt('z1.dat')[:,1]
+    z2arr = np.loadtxt('z2.dat')[:,1]
+    z3arr = np.loadtxt('z3.dat')[:,1]
+    
+    
+    lc1 = interp1d(tarr,lc1arr)
+    lc2 = interp1d(tarr,lc2arr)
+    lc3 = interp1d(tarr,lc3arr)
+    
+    z1 = interp1d(tarr,z1arr)
+    z2 = interp1d(tarr,z2arr)
+    z3 = interp1d(tarr,z3arr)
+
+
+    from tlnet_phase import h
+    
+    phi_tlnet = np.linspace(0,1,len(tarr))
+    xmin_tlnet = np.amin(phi_tlnet)
+    xmax_tlnet = np.amax(phi_tlnet)
+
+    ## plot H fun Morrison-curto
+    ax12.plot(phi_tlnet,h(tarr),lw=2)
+    ax12.set_xlim(xmin_tlnet,xmax_tlnet)
+    ax12.set_xticks([])
+
+    ax12.set_title('(b) Morrison-Curto')
+
+    ## plot -2dhodd fun. Morrison-curto
+
+    neg2hodd = h(-tarr)-h(tarr)    
+
+    # plot zeros (eyeballing. things are pretty symmetric so more sophisticated numerics not needed)
+    zero_coords = np.linspace(0,1,7)
+    zero_vals = np.zeros(len(zero_coords))
+
+    ax22.scatter(zero_coords[1::2],np.zeros(len(zero_coords[1::2])),color='k',zorder=3)
+    ax22.scatter(zero_coords[::2],np.zeros(len(zero_coords[::2])),facecolors='white',edgecolors='k',zorder=3)
+
+    # plot stability arrows
+    for x in zero_coords[1::2]:
+        ax22.annotate('',xy=(x-.04,.0),xytext=(x-.05,0),arrowprops=dict(facecolor='black',shrink=0.05,width=1,headwidth=6,frac=.5))
+        ax22.annotate('',xy=(x+.04,.0),xytext=(x+.05,0),arrowprops=dict(facecolor='black',shrink=0.05,width=1,headwidth=6,frac=.5))
+
+    ax22.plot([0,1],[0,0],color='gray')
+    ax22.plot(phi_tlnet,neg2hodd,lw=2)
+    ax22.set_xlim(xmin_tlnet,xmax_tlnet)
+
+    ax22.set_xlabel(r'$\phi$')
+    ax22.set_title('(d)')
+
+
+    plt.tight_layout()
+    
+    return fig
+    
     
 
 def generate_figure(function, args, filenames, title="", title_pos=(0.5,0.95)):
@@ -1609,19 +2122,29 @@ def main():
 
     figures = [
         #(glass_pert_displacemnt_fig,[],['fig1_glass_pert_displacement_fig.pdf']),
+        #(glass_pert_displacemnt_fig_fitted,[],['fig1_glass_pert_displacement_fig.pdf']),
+
+        #(glass_2d_fig_prc_combined,[],['fig_glass_2d_combined.pdf']),
+        
         #(glass_2d_fig,[],['fig4_glass_2d_fig.pdf']),
         #(glass_2d_prc_fig,[],['fig5_glass_2d_prc_fig.pdf']),
         #(iris_mod_fig,[0., 0.2],['fig6_iris_mod_a_fig.pdf']),
+
         #(iris_mod_fig,[0.05, 0.2],['fig6_iris_mod_b_fig.pdf']),
         #(iris_mod_fig,[0.2, 0.2],['fig6_iris_mod_c_fig.pdf']),
         #(iris_mod_fig,[0.33, 0.2],['fig6_iris_mod_d_fig.pdf']),
+
         #(iris_mod_prc_fig,[],['fig7_iris_mod_prc_fig.pdf']),
         #(nominal_biting_fig,[],['fig8_nominal_biting_fig_comined.pdf']),
         #(nominal_biting_prc_fig,[.01],['fig9_nominal_biting_prc_fig.pdf']),
         #(tlnet_fig,[],['fig10_tlnet_fig.png','tlnet_fig.pdf']),
+
         #(oct_domain_fig,[],['fig11_oct_fig.pdf']),
         #(oct_prc,[],['fig12_oct_prc.pdf']),
-        (oct_coupled_fig,[],['fig13_oct_coupled.pdf']),
+        #(oct_coupled_fig,[],['oct_coupled.pdf']),
+
+        (h_functions_all,[],['h_fns_all.pdf'])
+
     ]
 
     for fig in figures:

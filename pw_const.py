@@ -83,12 +83,12 @@ def oct_phase_reset_analytic(phi,dt=.001):
 
         elif (p >= 6.*pfinal/8.) and (p < 7.*pfinal/8.):
             sol[i,:] = prcvalues[6]
-        elif (p >= 7.*pfinal/8.) and (p < 8.*pfinal/8.):
+        elif (p >= 7.*pfinal/8.) and (p <= 8.*pfinal/8.):
             sol[i,:] = prcvalues[7]
 
     return sol
 
-def oct_phase_reset(phi, dx=0., dy=0., steps_per_cycle = 500000,
+def oct_phase_reset(phi, dx=0., dy=0., steps_per_cycle = 200000,
                     num_cycles = 3, return_intermediates=False,
                     ode_ver='fast'):
 
@@ -147,12 +147,15 @@ def oct_phase_reset(phi, dx=0., dy=0., steps_per_cycle = 500000,
 
     #crossing_times = crossing_times - crossing_times[0]
 
-    crossing_phases = np.fmod(crossing_times, T)/T# * 2 * math.pi
+    crossing_phases = np.fmod(crossing_times, T)# * 2 * math.pi
 
     print crossing_phases
 
     #crossing_phases[crossing_phases > math.pi] -= 2*math.pi
     crossing_phases[crossing_phases > T/2.] -= T
+
+    crossing_phases /= T
+
 
         
     if return_intermediates:
@@ -265,41 +268,44 @@ def phase2sv():
     pass
 
 def main():
-
-
-    """
-    # total perturbations
-    total_perts = 500
-
-    # phase values where perturbations will be applied
-
-    #dx = 1e-4
-    #dy = 0
     
+    show_num = True
 
-    pert = 1e-2 # keep perturbation to single variable for now
-    print "Calculating iPRC via direct method for perturbations in the x direction..."
-    phis = np.linspace(0,1,100)
-    x_prc = np.array([
+    if show_num:
+
+        # total perturbations
+        total_perts = 20
+
+        # phase values where perturbations will be applied
+
+        #dx = 1e-4
+        #dy = 0
+
+        pert = 1e-2 # keep perturbation to single variable for now
+        print "Calculating iPRC via direct method for perturbations in the x direction..."
+        phis = np.linspace(0,1-1./total_perts,total_perts)
+
+        x_prc = np.array([
             oct_phase_reset(phi*2*np.pi, dx=pert, dy=0)
             for phi in phis])
-    if pert != 0.0:
-        x_prc /= pert
-    x_prc = np.roll(x_prc,int(len(phis)*2./16.))
+        if pert != 0.0:
+            x_prc /= pert
+        #x_prc = np.roll(x_prc,int(len(phis)*2./16.))
 
-    y_prc = np.array([
-            oct_phase_reset(phi*2*np.pi, dx=0, dy=pert)
+        #x_prc = np.zeros(len(phis))
+
+        y_prc = np.array([
+            oct_phase_reset(phi*2*np.pi, dx=0, dy=pert,ode_ver='slow')
             for phi in phis])
-    if pert != 0.0:
-        y_prc /= pert
+        if pert != 0.0:
+            y_prc /= pert
 
-    y_prc = np.roll(y_prc,int(len(phis)*2./16.))
+        #y_prc = np.roll(y_prc,int(len(phis)*2./16.))
 
-
-    # create prc lookup table
+        # create prc lookup table
     
     #phis = np.linspace(0,2*math.pi,total_perts)
-    phi = np.linspace(0,1,1000)
+    phi = np.linspace(0,1,500)
     prc = oct_phase_reset_analytic(phi)
 
     
@@ -312,55 +318,36 @@ def main():
     lc2 = interp1d(t,vals[:,1])
 
     # numerics
-    mp.figure(figsize=(6,5))
-    mp.scatter(phis,x_prc,label=r'$z_x$ (numerics)',color='blue',s=20)
-    mp.scatter(phis,y_prc,label=r'$z_y$ (numerics)',color='green',s=20)
+    #mp.figure(figsize=(6,3))
+    #mp.scatter(phis,x_prc,label=r'$z_x$ (numerics)',color='blue',s=20,zorder=5)
+    #mp.scatter(phis,y_prc,label=r'$z_y$ (numerics)',color='green',s=20,alpha=.5,zorder=3)
     #mp.title('PRCs')
     #mp.plot(phi,prc1(phi),label='prcx')
     #mp.plot(phi,prc2(phi),label='prcy')
     #mp.plot(phis,oct_phase_reset_analytic(phis)[:,1])
 
-    mp.xlabel('Phase',fontsize=20)
-    mp.ylabel(r'$z$',fontsize=20)
-    mp.legend(loc=4,fontsize=20)
-    plt.xticks(fontsize=18)
+    #mp.xlabel('Phase',fontsize=20)
+    #mp.ylabel(r'$z$',fontsize=20)
+    #mp.legend(loc=4,fontsize=20)
+    #plt.xticks(fontsize=18)
 
     # theory + numerics
-    mp.figure(figsize=(6,5))
-    mp.scatter(phis,x_prc,label=r'$z_x$ (numerics)',color='blue',s=20)
-    mp.scatter(phis,y_prc,label=r'$z_y$ (numerics)',color='green',s=20)
+    mp.figure(figsize=(6,3))
+
+    if show_num:
+        mp.scatter(np.mod(phis+1./8,1),x_prc,label=r'$z_x$ (numerics)',color='blue',s=20)
+        mp.scatter(np.mod(phis+1./8,1),y_prc,label=r'$z_y$ (numerics)',color='green',s=20)
     #mp.title('PRCs')
     mp.plot(phi,prc1(phi),label=r'$z_x$ (theory)',color='black',lw=3)
     mp.plot(phi,prc2(phi),label=r'$z_y$ (theory)',color='gray',lw=3)
     #mp.plot(phis,oct_phase_reset_analytic(phis)[:,1])
 
-    mp.xlabel('Phase',fontsize=20)
-    mp.ylabel(r'$z$',fontsize=20)
-    #mp.legend(loc=4,fontsize=20)
-    plt.xticks(fontsize=18)
+    mp.xlabel('Phase',fontsize=15)
+    mp.ylabel(r'$z$',fontsize=15)
+    #mp.legend(loc=4,fontsize=10)
+    plt.xticks(fontsize=15)
+    plt.yticks(fontsize=15)
 
-
-    # theory only
-    mp.figure(figsize=(6,5))
-    #mp.title('PRCs',fontsize=20)
-    mp.plot(phi,prc1(phi),label=r'$z_x$ (theory)',color='black',lw=3)
-    mp.plot(phi,prc2(phi),label=r'$z_y$ (theory)',color='gray',lw=3)
-    #mp.plot(phis,oct_phase_reset_analytic(phis)[:,1])
-
-    mp.xlabel('Phase',fontsize=20)
-    mp.ylabel(r'$z$',fontsize=20)
-    mp.legend(loc=4,fontsize=20)
-    plt.xticks(fontsize=18)
-    """
-
-
-
-    """
-    mp.figure()
-    mp.plot(t,lc1(t),label='limit cycle x')
-    mp.plot(t,lc2(t),label='limit cycle y')
-    mp.legend()
-    """
 
     """
     mp.figure()
@@ -377,6 +364,7 @@ def main():
     mp.plot(t,sol)
     """
     
+    plt.tight_layout()
     
     mp.show()
 
