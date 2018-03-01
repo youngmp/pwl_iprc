@@ -2121,8 +2121,6 @@ def main():
 
 
     figures = [
-        (glass_pert_displacemnt_fig,[],['fig1_glass_pert_displacement_fig.pdf']),
-        #(glass_pert_displacemnt_fig_fitted,[],['fig1_glass_pert_displacement_fig.pdf']),
 
         (glass_2d_fig_prc_combined,[],['fig_glass_2d_combined.pdf']),
         
