@@ -88,16 +88,30 @@ def oct_phase_reset_analytic(phi,dt=.001):
 
     return sol
 
-def oct_phase_reset(phi, dx=0., dy=0., steps_per_cycle = 20000,
-                    num_cycles = 5, return_intermediates=False):
-    print phi/(2*np.pi)
+def oct_phase_reset(phi, dx=0., dy=0., steps_per_cycle = 500000,
+                    num_cycles = 3, return_intermediates=False,
+                    ode_ver='fast'):
+
+    if ode_ver == 'fast':
+        fn = 'limit_cycle_pw_const_coupled.ode'
+        T = 1.
+    elif ode_ver == 'slow':
+        fn = 'limit_cycle_pw_const_coupled_slower.ode'
+        T = 16.
+    else:
+        raise ValueError('invalid choice =', ode_ver)
+
+
+    print phi
     # total period
-    T = 1.
+
     dt = float(T)/steps_per_cycle
 
     steps_before = int(phi/(2*math.pi) * steps_per_cycle) + 1
 
-    npa,vn = xpprun('limit_cycle_pw_const_coupled.ode',
+    # run up to perturbation
+    npa,vn = xpprun(fn,
+                    inits={'x1':1,'y1':2.41421},
                     parameters={'meth':'euler',
                                 'dt':dt,
                                 'eps':0.,
@@ -106,8 +120,9 @@ def oct_phase_reset(phi, dx=0., dy=0., steps_per_cycle = 20000,
     t1 = npa[:,0]
     vals1 = npa[:,1:3]
     
+    # run after perturbation
     steps_after = steps_per_cycle * num_cycles - steps_before
-    npa,vn = xpprun('limit_cycle_pw_const_coupled.ode',
+    npa,vn = xpprun(fn,
                     inits={'x1':vals1[-1,0]+dx,'y1':vals1[-1,1]+dy},
                     parameters={'meth':'euler',
                                 'dt':dt,
@@ -117,55 +132,28 @@ def oct_phase_reset(phi, dx=0., dy=0., steps_per_cycle = 20000,
     t2 = npa[:,0]+T*phi/(2*math.pi)
     vals2 = npa[:,1:3]
 
-    t3 = np.linspace(0,num_cycles*steps_per_cycle*T,steps_before+steps_after)
-    npa,vn = xpprun('limit_cycle_pw_const_coupled.ode',
-                    parameters={'meth':'euler',
-                                'dt':dt,
-                                'eps':0.,
-                                'total':(steps_before+steps_after)*dt},
-                    clean_after=True)
+    x_section = 1.
 
-    # save the unperturbed trajectory after perturbation
-    t3 = npa[:,0][steps_before:]
-    vals3 = npa[:,1:3][steps_before:]
-
-
-    crossings = ((vals2[:-1,1] >= 0) * (vals2[1:,1] < 0) 
-                 * (vals2[1:,0] > 0))
-
-    crossings2 = ((vals3[:-1,1] >= 0) * (vals3[1:,1] < 0) 
-                 * (vals3[1:,0] > 0))
-
+    crossings = ((vals2[:-1,0] <= x_section) * (vals2[1:,0] > x_section)
+                 * (vals2[1:,1] > 0))
 
     if len(crossings) == 0:
         raise RuntimeError("No complete cycles after the perturbation")
 
-    if len(crossings2) == 0:
-        raise RuntimeError("No complete cycles after the perturbation")
+    crossing_fs = ((vals2[1:,0][crossings] - x_section)
+            / (vals2[1:,0][crossings]-vals2[:-1,0][crossings]) )
+    crossing_times = (crossing_fs * t2[:-1][crossings] 
+            + (1-crossing_fs) * t2[1:][crossings])
 
+    #crossing_times = crossing_times - crossing_times[0]
 
-    crossing_fs = ( (vals2[1:,1][crossings] - 0)
-                    / (vals2[1:,1][crossings]-vals2[:-1,1][crossings]) )
-    crossing_times = (crossing_fs * t2[:-1][crossings]
-                      + (1-crossing_fs) * t2[1:][crossings])
+    crossing_phases = np.fmod(crossing_times, T)/T# * 2 * math.pi
 
-    crossing_phases = np.mod(t2[:-1][crossings] - t3[:-1][crossings2]+T/2.,T)-T
+    print crossing_phases
 
-    #crossing_phases = np.mod(crossing_times,T)
-    #crossing_phases = np.fmod(crossing_times, T)/T# * 2 * math.pi
-    #crossing_phases = np.mod(crossing_times-T/2, T)+T# * 2 * math.pi
+    #crossing_phases[crossing_phases > math.pi] -= 2*math.pi
+    crossing_phases[crossing_phases > T/2.] -= T
 
-    """
-    mp.figure()
-    mp.plot(crossing_phases)
-    #mp.scatter(t1[1:][crossings],np.zeros(len(t1[1:]))[crossings])
-    mp.show()
-    """
-
-
-
-
-    #crossing_phases[crossing_phases > T/2.] -= T
         
     if return_intermediates:
         return dict(t1=t1, vals1=vals1, t2=t2, vals2=vals2,
@@ -176,7 +164,7 @@ def oct_phase_reset(phi, dx=0., dy=0., steps_per_cycle = 20000,
         return -crossing_phases[-1]
 
 
-def oct_lc(steps_per_cycle=5000):
+def oct_lc(steps_per_cycle=5000,ode_ver='fast'):
     """
     return the limit cycle.
     """
@@ -184,7 +172,16 @@ def oct_lc(steps_per_cycle=5000):
     dt = float(T)/steps_per_cycle
     total=steps_per_cycle*dt
 
-    npa,vn = xpprun('limit_cycle_pw_const_coupled.ode',
+    if ode_ver == 'fast':
+        fn = 'limit_cycle_pw_const_coupled.ode'
+        T = 1.
+    elif ode_ver == 'slow':
+        fn = 'limit_cycle_pw_const_coupled_slower.ode'
+        T = 16.
+    else:
+        raise ValueError('invalid choice =',ode_ver)
+
+    npa,vn = xpprun(fn,
                     inits={'x1':-1.,'y1':2.41421},
                     parameters={'meth':'euler',
                                 'dt':dt,
@@ -232,6 +229,30 @@ def generate_h(phi,lc1,lc2,prc1,prc2):
     return sol
 
 
+def generate_h_bad(phi,lc1,lc2,prc1,prc2):
+    """
+    lc,prc are the interp1d functions from def main
+    """
+    N = len(phi)
+    
+    sol = np.zeros(N)
+
+    for i in range(N):
+        tot = 0
+        for k in range(N):
+            sp = phi[i]
+            s = phi[k]
+            
+            g1,g2 = G([lc1(np.mod(s,phi[-1])),lc2(np.mod(s,phi[-1]))],
+                      [lc1(np.mod(s+sp,phi[-1])),lc2(np.mod(s+sp,phi[-1]))])
+            tot += 1+0*prc1(np.mod(s,phi[-1]))*g1 + 2+0*prc2(np.mod(s,phi[-1]))*g2
+
+        sol[i] = tot
+    sol *= (phi[-1]/N)/phi[-1]
+
+    return sol
+
+
 def phase_rhs(y,t,hfun):
     """
     hfun is the lookup table generated using interp1d
@@ -245,6 +266,8 @@ def phase2sv():
 
 def main():
 
+
+    """
     # total perturbations
     total_perts = 500
 
@@ -253,15 +276,25 @@ def main():
     #dx = 1e-4
     #dy = 0
     
-    """
+
     pert = 1e-2 # keep perturbation to single variable for now
     print "Calculating iPRC via direct method for perturbations in the x direction..."
+    phis = np.linspace(0,1,100)
     x_prc = np.array([
-            oct_phase_reset(phi, dx=pert, dy=0)
+            oct_phase_reset(phi*2*np.pi, dx=pert, dy=0)
             for phi in phis])
     if pert != 0.0:
         x_prc /= pert
-    """
+    x_prc = np.roll(x_prc,int(len(phis)*2./16.))
+
+    y_prc = np.array([
+            oct_phase_reset(phi*2*np.pi, dx=0, dy=pert)
+            for phi in phis])
+    if pert != 0.0:
+        y_prc /= pert
+
+    y_prc = np.roll(y_prc,int(len(phis)*2./16.))
+
 
     # create prc lookup table
     
@@ -278,19 +311,58 @@ def main():
     lc1 = interp1d(t,vals[:,0])
     lc2 = interp1d(t,vals[:,1])
 
-    mp.figure()
-    #mp.plot(phis,x_prc)
-    mp.title('PRCs')
-    mp.plot(phi,prc1(phi),label='prcx')
-    mp.plot(phi,prc2(phi),label='prcy')
+    # numerics
+    mp.figure(figsize=(6,5))
+    mp.scatter(phis,x_prc,label=r'$z_x$ (numerics)',color='blue',s=20)
+    mp.scatter(phis,y_prc,label=r'$z_y$ (numerics)',color='green',s=20)
+    #mp.title('PRCs')
+    #mp.plot(phi,prc1(phi),label='prcx')
+    #mp.plot(phi,prc2(phi),label='prcy')
     #mp.plot(phis,oct_phase_reset_analytic(phis)[:,1])
-    mp.legend()
 
+    mp.xlabel('Phase',fontsize=20)
+    mp.ylabel(r'$z$',fontsize=20)
+    mp.legend(loc=4,fontsize=20)
+    plt.xticks(fontsize=18)
+
+    # theory + numerics
+    mp.figure(figsize=(6,5))
+    mp.scatter(phis,x_prc,label=r'$z_x$ (numerics)',color='blue',s=20)
+    mp.scatter(phis,y_prc,label=r'$z_y$ (numerics)',color='green',s=20)
+    #mp.title('PRCs')
+    mp.plot(phi,prc1(phi),label=r'$z_x$ (theory)',color='black',lw=3)
+    mp.plot(phi,prc2(phi),label=r'$z_y$ (theory)',color='gray',lw=3)
+    #mp.plot(phis,oct_phase_reset_analytic(phis)[:,1])
+
+    mp.xlabel('Phase',fontsize=20)
+    mp.ylabel(r'$z$',fontsize=20)
+    #mp.legend(loc=4,fontsize=20)
+    plt.xticks(fontsize=18)
+
+
+    # theory only
+    mp.figure(figsize=(6,5))
+    #mp.title('PRCs',fontsize=20)
+    mp.plot(phi,prc1(phi),label=r'$z_x$ (theory)',color='black',lw=3)
+    mp.plot(phi,prc2(phi),label=r'$z_y$ (theory)',color='gray',lw=3)
+    #mp.plot(phis,oct_phase_reset_analytic(phis)[:,1])
+
+    mp.xlabel('Phase',fontsize=20)
+    mp.ylabel(r'$z$',fontsize=20)
+    mp.legend(loc=4,fontsize=20)
+    plt.xticks(fontsize=18)
+    """
+
+
+
+    """
     mp.figure()
     mp.plot(t,lc1(t),label='limit cycle x')
     mp.plot(t,lc2(t),label='limit cycle y')
     mp.legend()
+    """
 
+    """
     mp.figure()
     phi2 = np.linspace(0,1,100)
     hvals = generate_h(phi2,lc1,lc2,prc1,prc2)
@@ -303,7 +375,7 @@ def main():
     sol = odeint(phase_rhs,.49,t,args=(h,))
     mp.figure()
     mp.plot(t,sol)
-    
+    """
     
     
     mp.show()

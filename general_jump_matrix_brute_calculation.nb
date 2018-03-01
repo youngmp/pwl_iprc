@@ -1,0 +1,523 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.2' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     19628,        514]
+NotebookOptionsPosition[     19085,        491]
+NotebookOutlinePosition[     19421,        506]
+CellTagsIndexPosition[     19378,        503]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"A", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"a1", ",", "a2", ",", "a3", ",", "a4"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"v11", ",", "v12", ",", "v13", ",", "v14"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"v21", ",", "v22", ",", "v23", ",", "v24"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"v31", ",", "v32", ",", "v33", ",", "v34"}], "}"}]}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"B", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"b1", ",", "b2", ",", "b3", ",", "b4"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"v11", ",", "v12", ",", "v13", ",", "v14"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"v21", ",", "v22", ",", "v23", ",", "v24"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"v31", ",", "v32", ",", "v33", ",", "v34"}], "}"}]}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"FullSimplify", "[", 
+   RowBox[{
+    RowBox[{"Det", "[", "A", "]"}], 
+    RowBox[{
+     RowBox[{"Inverse", "[", "A", "]"}], ".", "B"}]}], "]"}], "//", 
+  "MatrixForm"}]}], "Input",
+ CellChangeTimes->{{3.6919853716259623`*^9, 3.6919854303729973`*^9}, 
+   3.6919854635847273`*^9, {3.69198809548846*^9, 3.691988137663834*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  RowBox[{"(", "\[NoBreak]", GridBox[{
+     {
+      RowBox[{
+       RowBox[{"a2", " ", "v14", " ", "v23", " ", "v31"}], "-", 
+       RowBox[{"a2", " ", "v13", " ", "v24", " ", "v31"}], "-", 
+       RowBox[{"b1", " ", "v14", " ", "v23", " ", "v32"}], "+", 
+       RowBox[{"b1", " ", "v13", " ", "v24", " ", "v32"}], "-", 
+       RowBox[{"a2", " ", "v14", " ", "v21", " ", "v33"}], "+", 
+       RowBox[{"b1", " ", "v14", " ", "v22", " ", "v33"}], "+", 
+       RowBox[{"a2", " ", "v11", " ", "v24", " ", "v33"}], "-", 
+       RowBox[{"b1", " ", "v12", " ", "v24", " ", "v33"}], "+", 
+       RowBox[{"a4", " ", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"v13", " ", "v22", " ", "v31"}], "-", 
+          RowBox[{"v12", " ", "v23", " ", "v31"}], "-", 
+          RowBox[{"v13", " ", "v21", " ", "v32"}], "+", 
+          RowBox[{"v11", " ", "v23", " ", "v32"}], "+", 
+          RowBox[{"v12", " ", "v21", " ", "v33"}], "-", 
+          RowBox[{"v11", " ", "v22", " ", "v33"}]}], ")"}]}], "+", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"a2", " ", "v13", " ", "v21"}], "-", 
+          RowBox[{"b1", " ", "v13", " ", "v22"}], "-", 
+          RowBox[{"a2", " ", "v11", " ", "v23"}], "+", 
+          RowBox[{"b1", " ", "v12", " ", "v23"}]}], ")"}], " ", "v34"}], "+", 
+       
+       RowBox[{"a3", " ", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"-", "v14"}], " ", "v22", " ", "v31"}], "+", 
+          RowBox[{"v12", " ", "v24", " ", "v31"}], "+", 
+          RowBox[{"v14", " ", "v21", " ", "v32"}], "-", 
+          RowBox[{"v11", " ", "v24", " ", "v32"}], "-", 
+          RowBox[{"v12", " ", "v21", " ", "v34"}], "+", 
+          RowBox[{"v11", " ", "v22", " ", "v34"}]}], ")"}]}]}], 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"a2", "-", "b2"}], ")"}], " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"v14", " ", "v23", " ", "v32"}], "-", 
+         RowBox[{"v13", " ", "v24", " ", "v32"}], "-", 
+         RowBox[{"v14", " ", "v22", " ", "v33"}], "+", 
+         RowBox[{"v12", " ", "v24", " ", "v33"}], "+", 
+         RowBox[{"v13", " ", "v22", " ", "v34"}], "-", 
+         RowBox[{"v12", " ", "v23", " ", "v34"}]}], ")"}]}], 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"a3", "-", "b3"}], ")"}], " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"v14", " ", "v23", " ", "v32"}], "-", 
+         RowBox[{"v13", " ", "v24", " ", "v32"}], "-", 
+         RowBox[{"v14", " ", "v22", " ", "v33"}], "+", 
+         RowBox[{"v12", " ", "v24", " ", "v33"}], "+", 
+         RowBox[{"v13", " ", "v22", " ", "v34"}], "-", 
+         RowBox[{"v12", " ", "v23", " ", "v34"}]}], ")"}]}], 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"a4", "-", "b4"}], ")"}], " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"v14", " ", "v23", " ", "v32"}], "-", 
+         RowBox[{"v13", " ", "v24", " ", "v32"}], "-", 
+         RowBox[{"v14", " ", "v22", " ", "v33"}], "+", 
+         RowBox[{"v12", " ", "v24", " ", "v33"}], "+", 
+         RowBox[{"v13", " ", "v22", " ", "v34"}], "-", 
+         RowBox[{"v12", " ", "v23", " ", "v34"}]}], ")"}]}]},
+     {
+      RowBox[{
+       RowBox[{"-", 
+        RowBox[{"(", 
+         RowBox[{"a1", "-", "b1"}], ")"}]}], " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"v14", " ", "v23", " ", "v31"}], "-", 
+         RowBox[{"v13", " ", "v24", " ", "v31"}], "-", 
+         RowBox[{"v14", " ", "v21", " ", "v33"}], "+", 
+         RowBox[{"v11", " ", "v24", " ", "v33"}], "+", 
+         RowBox[{"v13", " ", "v21", " ", "v34"}], "-", 
+         RowBox[{"v11", " ", "v23", " ", "v34"}]}], ")"}]}], 
+      RowBox[{
+       RowBox[{"b2", " ", "v14", " ", "v23", " ", "v31"}], "-", 
+       RowBox[{"b2", " ", "v13", " ", "v24", " ", "v31"}], "-", 
+       RowBox[{"a1", " ", "v14", " ", "v23", " ", "v32"}], "+", 
+       RowBox[{"a1", " ", "v13", " ", "v24", " ", "v32"}], "-", 
+       RowBox[{"b2", " ", "v14", " ", "v21", " ", "v33"}], "+", 
+       RowBox[{"a1", " ", "v14", " ", "v22", " ", "v33"}], "+", 
+       RowBox[{"b2", " ", "v11", " ", "v24", " ", "v33"}], "-", 
+       RowBox[{"a1", " ", "v12", " ", "v24", " ", "v33"}], "+", 
+       RowBox[{"a4", " ", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"v13", " ", "v22", " ", "v31"}], "-", 
+          RowBox[{"v12", " ", "v23", " ", "v31"}], "-", 
+          RowBox[{"v13", " ", "v21", " ", "v32"}], "+", 
+          RowBox[{"v11", " ", "v23", " ", "v32"}], "+", 
+          RowBox[{"v12", " ", "v21", " ", "v33"}], "-", 
+          RowBox[{"v11", " ", "v22", " ", "v33"}]}], ")"}]}], "+", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"b2", " ", "v13", " ", "v21"}], "-", 
+          RowBox[{"a1", " ", "v13", " ", "v22"}], "-", 
+          RowBox[{"b2", " ", "v11", " ", "v23"}], "+", 
+          RowBox[{"a1", " ", "v12", " ", "v23"}]}], ")"}], " ", "v34"}], "+", 
+       
+       RowBox[{"a3", " ", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"-", "v14"}], " ", "v22", " ", "v31"}], "+", 
+          RowBox[{"v12", " ", "v24", " ", "v31"}], "+", 
+          RowBox[{"v14", " ", "v21", " ", "v32"}], "-", 
+          RowBox[{"v11", " ", "v24", " ", "v32"}], "-", 
+          RowBox[{"v12", " ", "v21", " ", "v34"}], "+", 
+          RowBox[{"v11", " ", "v22", " ", "v34"}]}], ")"}]}]}], 
+      RowBox[{
+       RowBox[{"-", 
+        RowBox[{"(", 
+         RowBox[{"a3", "-", "b3"}], ")"}]}], " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"v14", " ", "v23", " ", "v31"}], "-", 
+         RowBox[{"v13", " ", "v24", " ", "v31"}], "-", 
+         RowBox[{"v14", " ", "v21", " ", "v33"}], "+", 
+         RowBox[{"v11", " ", "v24", " ", "v33"}], "+", 
+         RowBox[{"v13", " ", "v21", " ", "v34"}], "-", 
+         RowBox[{"v11", " ", "v23", " ", "v34"}]}], ")"}]}], 
+      RowBox[{
+       RowBox[{"-", 
+        RowBox[{"(", 
+         RowBox[{"a4", "-", "b4"}], ")"}]}], " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"v14", " ", "v23", " ", "v31"}], "-", 
+         RowBox[{"v13", " ", "v24", " ", "v31"}], "-", 
+         RowBox[{"v14", " ", "v21", " ", "v33"}], "+", 
+         RowBox[{"v11", " ", "v24", " ", "v33"}], "+", 
+         RowBox[{"v13", " ", "v21", " ", "v34"}], "-", 
+         RowBox[{"v11", " ", "v23", " ", "v34"}]}], ")"}]}]},
+     {
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"a1", "-", "b1"}], ")"}], " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"v14", " ", "v22", " ", "v31"}], "-", 
+         RowBox[{"v12", " ", "v24", " ", "v31"}], "-", 
+         RowBox[{"v14", " ", "v21", " ", "v32"}], "+", 
+         RowBox[{"v11", " ", "v24", " ", "v32"}], "+", 
+         RowBox[{"v12", " ", "v21", " ", "v34"}], "-", 
+         RowBox[{"v11", " ", "v22", " ", "v34"}]}], ")"}]}], 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"a2", "-", "b2"}], ")"}], " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"v14", " ", "v22", " ", "v31"}], "-", 
+         RowBox[{"v12", " ", "v24", " ", "v31"}], "-", 
+         RowBox[{"v14", " ", "v21", " ", "v32"}], "+", 
+         RowBox[{"v11", " ", "v24", " ", "v32"}], "+", 
+         RowBox[{"v12", " ", "v21", " ", "v34"}], "-", 
+         RowBox[{"v11", " ", "v22", " ", "v34"}]}], ")"}]}], 
+      RowBox[{
+       RowBox[{"a2", " ", "v14", " ", "v23", " ", "v31"}], "-", 
+       RowBox[{"a2", " ", "v13", " ", "v24", " ", "v31"}], "-", 
+       RowBox[{"a1", " ", "v14", " ", "v23", " ", "v32"}], "+", 
+       RowBox[{"a1", " ", "v13", " ", "v24", " ", "v32"}], "-", 
+       RowBox[{"a2", " ", "v14", " ", "v21", " ", "v33"}], "+", 
+       RowBox[{"a1", " ", "v14", " ", "v22", " ", "v33"}], "+", 
+       RowBox[{"a2", " ", "v11", " ", "v24", " ", "v33"}], "-", 
+       RowBox[{"a1", " ", "v12", " ", "v24", " ", "v33"}], "+", 
+       RowBox[{"a4", " ", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"v13", " ", "v22", " ", "v31"}], "-", 
+          RowBox[{"v12", " ", "v23", " ", "v31"}], "-", 
+          RowBox[{"v13", " ", "v21", " ", "v32"}], "+", 
+          RowBox[{"v11", " ", "v23", " ", "v32"}], "+", 
+          RowBox[{"v12", " ", "v21", " ", "v33"}], "-", 
+          RowBox[{"v11", " ", "v22", " ", "v33"}]}], ")"}]}], "+", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"a2", " ", "v13", " ", "v21"}], "-", 
+          RowBox[{"a1", " ", "v13", " ", "v22"}], "-", 
+          RowBox[{"a2", " ", "v11", " ", "v23"}], "+", 
+          RowBox[{"a1", " ", "v12", " ", "v23"}]}], ")"}], " ", "v34"}], "+", 
+       
+       RowBox[{"b3", " ", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"-", "v14"}], " ", "v22", " ", "v31"}], "+", 
+          RowBox[{"v12", " ", "v24", " ", "v31"}], "+", 
+          RowBox[{"v14", " ", "v21", " ", "v32"}], "-", 
+          RowBox[{"v11", " ", "v24", " ", "v32"}], "-", 
+          RowBox[{"v12", " ", "v21", " ", "v34"}], "+", 
+          RowBox[{"v11", " ", "v22", " ", "v34"}]}], ")"}]}]}], 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"a4", "-", "b4"}], ")"}], " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"v14", " ", "v22", " ", "v31"}], "-", 
+         RowBox[{"v12", " ", "v24", " ", "v31"}], "-", 
+         RowBox[{"v14", " ", "v21", " ", "v32"}], "+", 
+         RowBox[{"v11", " ", "v24", " ", "v32"}], "+", 
+         RowBox[{"v12", " ", "v21", " ", "v34"}], "-", 
+         RowBox[{"v11", " ", "v22", " ", "v34"}]}], ")"}]}]},
+     {
+      RowBox[{
+       RowBox[{"-", 
+        RowBox[{"(", 
+         RowBox[{"a1", "-", "b1"}], ")"}]}], " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"v13", " ", "v22", " ", "v31"}], "-", 
+         RowBox[{"v12", " ", "v23", " ", "v31"}], "-", 
+         RowBox[{"v13", " ", "v21", " ", "v32"}], "+", 
+         RowBox[{"v11", " ", "v23", " ", "v32"}], "+", 
+         RowBox[{"v12", " ", "v21", " ", "v33"}], "-", 
+         RowBox[{"v11", " ", "v22", " ", "v33"}]}], ")"}]}], 
+      RowBox[{
+       RowBox[{"-", 
+        RowBox[{"(", 
+         RowBox[{"a2", "-", "b2"}], ")"}]}], " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"v13", " ", "v22", " ", "v31"}], "-", 
+         RowBox[{"v12", " ", "v23", " ", "v31"}], "-", 
+         RowBox[{"v13", " ", "v21", " ", "v32"}], "+", 
+         RowBox[{"v11", " ", "v23", " ", "v32"}], "+", 
+         RowBox[{"v12", " ", "v21", " ", "v33"}], "-", 
+         RowBox[{"v11", " ", "v22", " ", "v33"}]}], ")"}]}], 
+      RowBox[{
+       RowBox[{"-", 
+        RowBox[{"(", 
+         RowBox[{"a3", "-", "b3"}], ")"}]}], " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"v13", " ", "v22", " ", "v31"}], "-", 
+         RowBox[{"v12", " ", "v23", " ", "v31"}], "-", 
+         RowBox[{"v13", " ", "v21", " ", "v32"}], "+", 
+         RowBox[{"v11", " ", "v23", " ", "v32"}], "+", 
+         RowBox[{"v12", " ", "v21", " ", "v33"}], "-", 
+         RowBox[{"v11", " ", "v22", " ", "v33"}]}], ")"}]}], 
+      RowBox[{
+       RowBox[{"a2", " ", "v14", " ", "v23", " ", "v31"}], "-", 
+       RowBox[{"a2", " ", "v13", " ", "v24", " ", "v31"}], "-", 
+       RowBox[{"a1", " ", "v14", " ", "v23", " ", "v32"}], "+", 
+       RowBox[{"a1", " ", "v13", " ", "v24", " ", "v32"}], "-", 
+       RowBox[{"a2", " ", "v14", " ", "v21", " ", "v33"}], "+", 
+       RowBox[{"a1", " ", "v14", " ", "v22", " ", "v33"}], "+", 
+       RowBox[{"a2", " ", "v11", " ", "v24", " ", "v33"}], "-", 
+       RowBox[{"a1", " ", "v12", " ", "v24", " ", "v33"}], "+", 
+       RowBox[{"b4", " ", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"v13", " ", "v22", " ", "v31"}], "-", 
+          RowBox[{"v12", " ", "v23", " ", "v31"}], "-", 
+          RowBox[{"v13", " ", "v21", " ", "v32"}], "+", 
+          RowBox[{"v11", " ", "v23", " ", "v32"}], "+", 
+          RowBox[{"v12", " ", "v21", " ", "v33"}], "-", 
+          RowBox[{"v11", " ", "v22", " ", "v33"}]}], ")"}]}], "+", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"a2", " ", "v13", " ", "v21"}], "-", 
+          RowBox[{"a1", " ", "v13", " ", "v22"}], "-", 
+          RowBox[{"a2", " ", "v11", " ", "v23"}], "+", 
+          RowBox[{"a1", " ", "v12", " ", "v23"}]}], ")"}], " ", "v34"}], "+", 
+       
+       RowBox[{"a3", " ", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"-", "v14"}], " ", "v22", " ", "v31"}], "+", 
+          RowBox[{"v12", " ", "v24", " ", "v31"}], "+", 
+          RowBox[{"v14", " ", "v21", " ", "v32"}], "-", 
+          RowBox[{"v11", " ", "v24", " ", "v32"}], "-", 
+          RowBox[{"v12", " ", "v21", " ", "v34"}], "+", 
+          RowBox[{"v11", " ", "v22", " ", "v34"}]}], ")"}]}]}]}
+    },
+    GridBoxAlignment->{
+     "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+      "RowsIndexed" -> {}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.7]}, 
+        Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.4]}, 
+        Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
+  Function[BoxForm`e$, 
+   MatrixForm[BoxForm`e$]]]], "Output",
+ CellChangeTimes->{{3.691985409846608*^9, 3.6919854306108017`*^9}, 
+   3.691985467578953*^9, {3.69198811382668*^9, 3.691988139999271*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{"A", "//", "MatrixForm"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Det", "[", "A", "]"}], "*", 
+   RowBox[{"Inverse", "[", "A", "]"}]}], "//", 
+  "MatrixForm"}], "\[IndentingNewLine]", 
+ RowBox[{"B", "//", "MatrixForm"}]}], "Input",
+ CellChangeTimes->{{3.6919861716766233`*^9, 3.69198617967768*^9}, {
+   3.691986249966206*^9, 3.691986264774*^9}, 3.6919865939868803`*^9}],
+
+Cell[BoxData[
+ TagBox[
+  RowBox[{"(", "\[NoBreak]", GridBox[{
+     {"a1", "a2", "a3"},
+     {"v11", "v12", "v13"},
+     {"v21", "v22", "v23"}
+    },
+    GridBoxAlignment->{
+     "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+      "RowsIndexed" -> {}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.7]}, 
+        Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.4]}, 
+        Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
+  Function[BoxForm`e$, 
+   MatrixForm[BoxForm`e$]]]], "Output",
+ CellChangeTimes->{
+  3.691986179980863*^9, {3.691986259860963*^9, 3.691986265089541*^9}, 
+   3.691986606684741*^9}],
+
+Cell[BoxData[
+ TagBox[
+  RowBox[{"(", "\[NoBreak]", GridBox[{
+     {
+      RowBox[{
+       RowBox[{
+        RowBox[{"-", "v13"}], " ", "v22"}], "+", 
+       RowBox[{"v12", " ", "v23"}]}], 
+      RowBox[{
+       RowBox[{"a3", " ", "v22"}], "-", 
+       RowBox[{"a2", " ", "v23"}]}], 
+      RowBox[{
+       RowBox[{
+        RowBox[{"-", "a3"}], " ", "v12"}], "+", 
+       RowBox[{"a2", " ", "v13"}]}]},
+     {
+      RowBox[{
+       RowBox[{"v13", " ", "v21"}], "-", 
+       RowBox[{"v11", " ", "v23"}]}], 
+      RowBox[{
+       RowBox[{
+        RowBox[{"-", "a3"}], " ", "v21"}], "+", 
+       RowBox[{"a1", " ", "v23"}]}], 
+      RowBox[{
+       RowBox[{"a3", " ", "v11"}], "-", 
+       RowBox[{"a1", " ", "v13"}]}]},
+     {
+      RowBox[{
+       RowBox[{
+        RowBox[{"-", "v12"}], " ", "v21"}], "+", 
+       RowBox[{"v11", " ", "v22"}]}], 
+      RowBox[{
+       RowBox[{"a2", " ", "v21"}], "-", 
+       RowBox[{"a1", " ", "v22"}]}], 
+      RowBox[{
+       RowBox[{
+        RowBox[{"-", "a2"}], " ", "v11"}], "+", 
+       RowBox[{"a1", " ", "v12"}]}]}
+    },
+    GridBoxAlignment->{
+     "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+      "RowsIndexed" -> {}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.7]}, 
+        Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.4]}, 
+        Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
+  Function[BoxForm`e$, 
+   MatrixForm[BoxForm`e$]]]], "Output",
+ CellChangeTimes->{
+  3.691986179980863*^9, {3.691986259860963*^9, 3.691986265089541*^9}, 
+   3.691986606685543*^9}],
+
+Cell[BoxData[
+ TagBox[
+  RowBox[{"(", "\[NoBreak]", GridBox[{
+     {"b1", "b2", "b3"},
+     {"v11", "v12", "v13"},
+     {"v21", "v22", "v23"}
+    },
+    GridBoxAlignment->{
+     "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+      "RowsIndexed" -> {}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.7]}, 
+        Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.4]}, 
+        Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
+  Function[BoxForm`e$, 
+   MatrixForm[BoxForm`e$]]]], "Output",
+ CellChangeTimes->{
+  3.691986179980863*^9, {3.691986259860963*^9, 3.691986265089541*^9}, 
+   3.69198660668748*^9}]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{"Det", "[", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"b1", ",", "a2", ",", "a3"}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{",", ","}], "}"}], ",", 
+    RowBox[{"{", "}"}]}], "}"}], "]"}]], "Input",
+ CellChangeTimes->{{3.6919875766341352`*^9, 3.6919876105273848`*^9}}]
+},
+WindowSize->{1720, 911},
+WindowMargins->{{55, Automatic}, {Automatic, 415}},
+FrontEndVersion->"10.2 for Linux x86 (64-bit) (July 29, 2015)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 1279, 35, 77, "Input"],
+Cell[1862, 59, 13276, 303, 98, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[15175, 367, 411, 9, 77, "Input"],
+Cell[15589, 378, 749, 21, 77, "Output"],
+Cell[16341, 401, 1661, 53, 77, "Output"],
+Cell[18005, 456, 748, 21, 77, "Output"]
+}, Open  ]],
+Cell[18768, 480, 313, 9, 32, "Input"]
+}
+]
+*)
+
+(* End of internal cache information *)

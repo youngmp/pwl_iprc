@@ -1,0 +1,391 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.2' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     11150,        382]
+NotebookOptionsPosition[     10542,        357]
+NotebookOutlinePosition[     10878,        372]
+CellTagsIndexPosition[     10835,        369]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.691662852439378*^9, 3.6916628527302027`*^9}}],
+
+Cell[TextData[{
+ "Comparison of Saltation matrix to Jump matrix for the system\n",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox[
+     OverscriptBox["x", "."], "+"], "=", 
+    RowBox[{
+     RowBox[{
+      SuperscriptBox[
+       SubscriptBox["a", "11"], "+"], "x"}], "+", 
+     RowBox[{
+      SuperscriptBox[
+       SubscriptBox["a", "12"], "+"], "y"}]}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\n",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox[
+     OverscriptBox["y", "."], "+"], "=", 
+    RowBox[{
+     RowBox[{
+      SuperscriptBox[
+       SubscriptBox["a", "21"], "+"], "x"}], "+", 
+     RowBox[{
+      SuperscriptBox[
+       SubscriptBox["a", "22"], "+"], "y"}]}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\nfor x \[GreaterEqual]1 and a different choice of coefficients for x\
+\[LessEqual]1. The system produces a stable limit cycle for \
+\[LineSeparator]",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox[
+     SubscriptBox["a", "11"], "+"], "=", 
+    RowBox[{"19", "/", "500"}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\n",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox[
+     SubscriptBox["a", "12"], "+"], "=", 
+    RowBox[{
+     RowBox[{"-", "1"}], "/", "10"}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\n",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox[
+     SubscriptBox["a", "21"], "+"], "=", 
+    RowBox[{"1", "/", "10"}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\n",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox[
+     SubscriptBox["a", "22"], "+"], "=", 
+    RowBox[{"19", "/", "500"}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\nand\n",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox[
+     SubscriptBox["a", "11"], "-"], "=", "1"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\n",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox[
+     SubscriptBox["a", "12"], "-"], "=", 
+    RowBox[{"-", "5"}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\n",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox[
+     SubscriptBox["a", "21"], "-"], "=", 
+    RowBox[{"377", "/", "1000"}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\n",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SuperscriptBox[
+     SubscriptBox["a", "22"], "-"], "=", 
+    RowBox[{
+     RowBox[{"-", "13"}], "/", "10"}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"]
+}], "Text",
+ CellChangeTimes->{{3.691662866821274*^9, 3.691663148798712*^9}}],
+
+Cell[TextData[{
+ "(see filippov.ode). The saltation matrix for the crossing points are\n",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    SubscriptBox["Q", "x"], "=", 
+    TagBox[
+     RowBox[{"(", "\[NoBreak]", GridBox[{
+        {
+         RowBox[{"1", "+", 
+          FractionBox[
+           RowBox[{
+            SuperscriptBox[
+             RowBox[{"(", 
+              SubscriptBox["a", "11"], ")"}], "-"], "-", 
+            SuperscriptBox[
+             RowBox[{"(", 
+              SubscriptBox["a", "11"], ")"}], "+"], "+", 
+            RowBox[{
+             SubscriptBox["x", 
+              RowBox[{"2", " ", 
+               SuperscriptBox["bdy", "i"]}]], " ", 
+             RowBox[{"(", 
+              RowBox[{
+               SuperscriptBox[
+                RowBox[{"(", 
+                 SubscriptBox["a", "12"], ")"}], "-"], "-", 
+               SuperscriptBox[
+                RowBox[{"(", 
+                 SubscriptBox["a", "12"], ")"}], "+"]}], ")"}]}]}], 
+           RowBox[{
+            SuperscriptBox[
+             RowBox[{"(", 
+              SubscriptBox["a", "11"], ")"}], "+"], "+", 
+            RowBox[{
+             SubsuperscriptBox["x", 
+              RowBox[{"2", " ", "bdy"}], "i"], " ", 
+             SuperscriptBox[
+              RowBox[{"(", 
+               SubscriptBox["a", "12"], ")"}], "+"]}]}]]}], "0"},
+        {
+         FractionBox[
+          RowBox[{
+           SuperscriptBox[
+            RowBox[{"(", 
+             SubscriptBox["a", "21"], ")"}], "-"], "-", 
+           SuperscriptBox[
+            RowBox[{"(", 
+             SubscriptBox["a", "21"], ")"}], "+"], "+", 
+           RowBox[{
+            SubsuperscriptBox["x", 
+             RowBox[{"2", " ", "bdy"}], "i"], " ", 
+            RowBox[{"(", 
+             RowBox[{
+              SuperscriptBox[
+               RowBox[{"(", 
+                SubscriptBox["a", "22"], ")"}], "-"], "-", 
+              SuperscriptBox[
+               RowBox[{"(", 
+                SubscriptBox["a", "22"], ")"}], "+"]}], ")"}]}]}], 
+          RowBox[{
+           SuperscriptBox[
+            RowBox[{"(", 
+             SubscriptBox["a", "11"], ")"}], "+"], "+", 
+           RowBox[{
+            SubsuperscriptBox["x", 
+             RowBox[{"2", " ", "bdy"}], "i"], " ", 
+            SuperscriptBox[
+             RowBox[{"(", 
+              SubscriptBox["a", "12"], ")"}], "+"]}]}]], "1"}
+       },
+       GridBoxAlignment->{
+        "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, 
+         "Rows" -> {{Baseline}}, "RowsIndexed" -> {}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.7]}, 
+           Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
+     Function[BoxForm`e$, 
+      MatrixForm[BoxForm`e$]]]}], TraditionalForm]],
+  FormatType->"TraditionalForm"]
+}], "Text",
+ CellChangeTimes->{{3.691662990445221*^9, 3.691662995323264*^9}, {
+  3.691663165326023*^9, 3.691663264422543*^9}, {3.691663362231634*^9, 
+  3.6916633622316637`*^9}}],
+
+Cell[TextData[{
+ "For this calculation I took ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     RowBox[{"H", "(", 
+      OverscriptBox["x", 
+       RowBox[{"\[Rule]", " "}]], ")"}], "=", 
+     RowBox[{"<", 
+      RowBox[{"(", 
+       RowBox[{
+        OverscriptBox["x", 
+         RowBox[{"\[Rule]", " "}]], "-", "1"}], ")"}]}]}], ",", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"1", ",", "0"}], ")"}], ">"}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ ". So at the boundary point,\n",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{
+     SubscriptBox["H", 
+      OverscriptBox["x", "\[Rule]"]], "(", 
+     OverscriptBox["x", 
+      RowBox[{"\[Rule]", " "}]], ")"}], "=", 
+    RowBox[{"(", 
+     RowBox[{"1", ",", "0"}], ")"}]}], TraditionalForm]]],
+ "."
+}], "Text",
+ CellChangeTimes->{{3.691663962934555*^9, 3.6916640903744698`*^9}}],
+
+Cell["\<\
+The jump matrix at the first crossing point (the lower crossing point at x=1) \
+is\
+\>", "Text",
+ CellChangeTimes->{{3.691663370613639*^9, 3.691663395355708*^9}, {
+  3.691663655102886*^9, 3.69166366067807*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"A", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"a11p", "+", 
+        RowBox[{"a12p", " ", "x2bdyc1"}]}], ",", 
+       RowBox[{"a21p", "+", 
+        RowBox[{"a22p", " ", "x2bdyc1"}]}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"0", ",", "1"}], "}"}]}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"B", "=", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"a11m", "+", 
+         RowBox[{"a12m", " ", "x2bdyc1"}]}], ",", 
+        RowBox[{"a21m", "+", 
+         RowBox[{"a22m", " ", "x2bdyc1"}]}]}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"0", ",", "1"}], "}"}]}], "}"}]}], ";"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{"(*", " ", 
+   RowBox[{
+    RowBox[{"a11p", " ", "means", " ", 
+     SuperscriptBox[
+      SubscriptBox["a", "11"], "+"]}], ",", " ", 
+    RowBox[{
+    "x2bdyc1", " ", "means", " ", "the", " ", "x2", " ", "value", " ", "at", 
+     " ", "the", " ", "boundary", " ", "crossing", " ", "point", " ", 
+     "c1"}]}], " ", "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Inverse", "[", "A", "]"}], ".", "B"}]}], "Input",
+ CellChangeTimes->{{3.6916633794728394`*^9, 3.691663511767138*^9}, {
+  3.691663557539551*^9, 3.691663578787345*^9}, {3.691664186495318*^9, 
+  3.691664210869074*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     FractionBox[
+      RowBox[{"a11m", "+", 
+       RowBox[{"a12m", " ", "x2bdyc1"}]}], 
+      RowBox[{"a11p", "+", 
+       RowBox[{"a12p", " ", "x2bdyc1"}]}]], ",", 
+     RowBox[{
+      FractionBox[
+       RowBox[{"a21m", "+", 
+        RowBox[{"a22m", " ", "x2bdyc1"}]}], 
+       RowBox[{"a11p", "+", 
+        RowBox[{"a12p", " ", "x2bdyc1"}]}]], "+", 
+      FractionBox[
+       RowBox[{
+        RowBox[{"-", "a21p"}], "-", 
+        RowBox[{"a22p", " ", "x2bdyc1"}]}], 
+       RowBox[{"a11p", "+", 
+        RowBox[{"a12p", " ", "x2bdyc1"}]}]]}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0", ",", "1"}], "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{{3.691663504577054*^9, 3.691663512019487*^9}, 
+   3.691663558495892*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Transpose", "[", "%", "]"}]], "Input",
+ CellChangeTimes->{{3.691663520518672*^9, 3.691663524334557*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     FractionBox[
+      RowBox[{"a11m", "+", 
+       RowBox[{"a12m", " ", "x2bdyc1"}]}], 
+      RowBox[{"a11p", "+", 
+       RowBox[{"a12p", " ", "x2bdyc1"}]}]], ",", "0"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{
+      FractionBox[
+       RowBox[{"a21m", "+", 
+        RowBox[{"a22m", " ", "x2bdyc1"}]}], 
+       RowBox[{"a11p", "+", 
+        RowBox[{"a12p", " ", "x2bdyc1"}]}]], "+", 
+      FractionBox[
+       RowBox[{
+        RowBox[{"-", "a21p"}], "-", 
+        RowBox[{"a22p", " ", "x2bdyc1"}]}], 
+       RowBox[{"a11p", "+", 
+        RowBox[{"a12p", " ", "x2bdyc1"}]}]]}], ",", "1"}], "}"}]}], 
+  "}"}]], "Output",
+ CellChangeTimes->{3.691663524550316*^9, 3.69166355981603*^9}]
+}, Open  ]]
+},
+WindowSize->{808, 911},
+WindowMargins->{{337, Automatic}, {460, Automatic}},
+FrontEndVersion->"10.2 for Linux x86 (64-bit) (July 29, 2015)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 94, 1, 32, "Input"],
+Cell[655, 23, 2549, 97, 250, "Text"],
+Cell[3207, 122, 3108, 87, 143, "Text"],
+Cell[6318, 211, 862, 31, 75, "Text"],
+Cell[7183, 244, 220, 5, 31, "Text"],
+Cell[CellGroupData[{
+Cell[7428, 253, 1359, 40, 121, "Input"],
+Cell[8790, 295, 797, 25, 51, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[9624, 325, 128, 2, 32, "Input"],
+Cell[9755, 329, 771, 25, 51, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

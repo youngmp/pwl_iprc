@@ -1,0 +1,105 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.2' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[      2624,         96]
+NotebookOptionsPosition[      2284,         79]
+NotebookOutlinePosition[      2621,         94]
+CellTagsIndexPosition[      2578,         91]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell["\<\
+This term is to derive the additional term we need to make the limit cycle \
+solution weakly unstable within a given vector field. The edge effects \
+ultimately make the limit cycle solution stable.\
+\>", "Text",
+ CellChangeTimes->{{3.7084371586836967`*^9, 3.708437202845364*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"Cos", "[", "\[Theta]", "]"}], ",", 
+       RowBox[{"-", 
+        RowBox[{"Sin", "[", "\[Theta]", "]"}]}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"Sin", "[", "\[Theta]", "]"}], ",", 
+       RowBox[{"Cos", "[", "\[Theta]", "]"}]}], "}"}]}], "}"}], ".", 
+   RowBox[{"{", 
+    RowBox[{"0", ",", 
+     RowBox[{"Exp", "[", 
+      RowBox[{"\[Lambda]", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"Sqrt", "[", "2", "]"}], "-", "1", "-", "y"}], ")"}]}], 
+      "]"}]}], "}"}]}], "/.", 
+  RowBox[{"\[Theta]", "\[Rule]", 
+   RowBox[{"-", 
+    FractionBox["\[Pi]", "4"]}]}]}]], "Input",
+ CellChangeTimes->{{3.708437058064543*^9, 3.708437130604109*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"-", 
+    FractionBox[
+     SuperscriptBox["\[ExponentialE]", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"-", "1"}], "+", 
+         SqrtBox["2"], "-", "y"}], ")"}], " ", "\[Lambda]"}]], 
+     SqrtBox["2"]]}], ",", 
+   FractionBox[
+    SuperscriptBox["\[ExponentialE]", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"-", "1"}], "+", 
+        SqrtBox["2"], "-", "y"}], ")"}], " ", "\[Lambda]"}]], 
+    SqrtBox["2"]]}], "}"}]], "Output",
+ CellChangeTimes->{{3.708437106668887*^9, 3.708437121787139*^9}}]
+}, Open  ]]
+},
+WindowSize->{808, 911},
+WindowMargins->{{Automatic, 1862}, {467, Automatic}},
+FrontEndVersion->"10.2 for Linux x86 (64-bit) (July 29, 2015)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 290, 5, 51, "Text"],
+Cell[CellGroupData[{
+Cell[873, 29, 792, 25, 75, "Input"],
+Cell[1668, 56, 600, 20, 64, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

@@ -1489,12 +1489,16 @@ def oct_coupled_fig():
 
     phi2 = np.linspace(0,1,100)
     hvals = pwc.generate_h(phi2,lc1,lc2,prc1,prc2)
+
+    hvals_bad = pwc.generate_h_bad(phi2,lc1,lc2,prc1,prc2)
     
     h = interp1d(phi2,hvals)
+    h_bad = interp1d(phi2,hvals_bad)
     
     ax3 = fig.add_subplot(133)
     t = np.linspace(0,100,10000)
     sol = odeint(pwc.phase_rhs,.49,t,args=(h,))
+    sol_bad = odeint(pwc.phase_rhs,.49,t,args=(h_bad,))
 
     
     # EXTRACT PHASES
@@ -1559,6 +1563,7 @@ def oct_coupled_fig():
     ax3.scatter(simt[:-1:500],phi[:-1:500],color='black',label='Numerical Phase Difference')
 
     ax3.plot(t,sol,color='#80bfff',lw=3,ls='--',dashes=(5,1))
+    ax3.plot(t,sol_bad,color='gray',lw=3,ls='--',dashes=(5,1))
     ax3.set_ylabel(r'\textbf{Phase Difference}')
     ax3.set_xlabel(r'$\bm{t}$')
     ax3.set_ylim(-.01,.51)
@@ -1603,21 +1608,24 @@ def main():
 
 
     figures = [
-        (glass_pert_displacemnt_fig,[],['fig1_glass_pert_displacement_fig.pdf']),
-        (glass_2d_fig,[],['fig4_glass_2d_fig.pdf']),
-        (glass_2d_prc_fig,[],['fig5_glass_2d_prc_fig.pdf']),
-        (iris_mod_fig,[0., 0.2],['fig6_iris_mod_a_fig.pdf']),
-        (iris_mod_fig,[0.05, 0.2],['fig6_iris_mod_b_fig.pdf']),
-        (iris_mod_fig,[0.2, 0.2],['fig6_iris_mod_c_fig.pdf']),
-        (iris_mod_fig,[0.33, 0.2],['fig6_iris_mod_d_fig.pdf']),
-        (iris_mod_prc_fig,[],['fig7_iris_mod_prc_fig.pdf']),
-        (nominal_biting_fig,[],['fig8_nominal_biting_fig_comined.pdf']),
-        (nominal_biting_prc_fig,[.01],['fig9_nominal_biting_prc_fig.pdf']),
-        (tlnet_fig,[],['fig10_tlnet_fig.png','tlnet_fig.pdf']),
-        (oct_domain_fig,[],['fig11_oct_fig.pdf']),
-        (oct_prc,[],['fig12_oct_prc.pdf']),
+        #(glass_pert_displacemnt_fig,[],['fig1_glass_pert_displacement_fig.pdf']),
+        #(glass_2d_fig,[],['fig4_glass_2d_fig.pdf']),
+        #(glass_2d_prc_fig,[],['fig5_glass_2d_prc_fig.pdf']),
+        #(iris_mod_fig,[0., 0.2],['fig6_iris_mod_a_fig.pdf']),
+        #(iris_mod_fig,[0.05, 0.2],['fig6_iris_mod_b_fig.pdf']),
+        #(iris_mod_fig,[0.2, 0.2],['fig6_iris_mod_c_fig.pdf']),
+        #(iris_mod_fig,[0.33, 0.2],['fig6_iris_mod_d_fig.pdf']),
+        #(iris_mod_prc_fig,[],['fig7_iris_mod_prc_fig.pdf']),
+        #(nominal_biting_fig,[],['fig8_nominal_biting_fig_comined.pdf']),
+        #(nominal_biting_prc_fig,[.01],['fig9_nominal_biting_prc_fig.pdf']),
+        #(tlnet_fig,[],['fig10_tlnet_fig.png','tlnet_fig.pdf']),
+        #(oct_domain_fig,[],['fig11_oct_fig.pdf']),
+        #(oct_prc,[],['fig12_oct_prc.pdf']),
         (oct_coupled_fig,[],['fig13_oct_coupled.pdf']),
     ]
+
+    for fig in figures:
+        generate_figure(*fig)
 
     """
     # set up one process per figure
