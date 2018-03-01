@@ -2121,10 +2121,10 @@ def main():
 
 
     figures = [
-        #(glass_pert_displacemnt_fig,[],['fig1_glass_pert_displacement_fig.pdf']),
+        (glass_pert_displacemnt_fig,[],['fig1_glass_pert_displacement_fig.pdf']),
         #(glass_pert_displacemnt_fig_fitted,[],['fig1_glass_pert_displacement_fig.pdf']),
 
-        #(glass_2d_fig_prc_combined,[],['fig_glass_2d_combined.pdf']),
+        (glass_2d_fig_prc_combined,[],['fig_glass_2d_combined.pdf']),
         
         #(glass_2d_fig,[],['fig4_glass_2d_fig.pdf']),
         #(glass_2d_prc_fig,[],['fig5_glass_2d_prc_fig.pdf']),
@@ -2135,13 +2135,13 @@ def main():
         #(iris_mod_fig,[0.33, 0.2],['fig6_iris_mod_d_fig.pdf']),
 
         #(iris_mod_prc_fig,[],['fig7_iris_mod_prc_fig.pdf']),
-        #(nominal_biting_fig,[],['fig8_nominal_biting_fig_comined.pdf']),
-        #(nominal_biting_prc_fig,[.01],['fig9_nominal_biting_prc_fig.pdf']),
-        #(tlnet_fig,[],['fig10_tlnet_fig.png','tlnet_fig.pdf']),
+        (nominal_biting_fig,[],['fig8_nominal_biting_fig_comined.pdf']),
+        (nominal_biting_prc_fig,[.01],['fig9_nominal_biting_prc_fig.pdf']),
+        (tlnet_fig,[],['fig10_tlnet_fig.png','tlnet_fig.pdf']),
 
-        #(oct_domain_fig,[],['fig11_oct_fig.pdf']),
-        #(oct_prc,[],['fig12_oct_prc.pdf']),
-        #(oct_coupled_fig,[],['oct_coupled.pdf']),
+        (oct_domain_fig,[],['fig11_oct_fig.pdf']),
+        (oct_prc,[],['fig12_oct_prc.pdf']),
+        (oct_coupled_fig,[],['oct_coupled.pdf']),
 
         (h_functions_all,[],['h_fns_all.pdf'])
 
