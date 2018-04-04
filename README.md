@@ -7,9 +7,6 @@ To generate the various figures from the paper, you will need to run the followi
 
 ```
 python generate_figures.py
-```
-
-```
 python pw_const.py
 ```
 
