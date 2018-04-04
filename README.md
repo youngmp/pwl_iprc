@@ -6,6 +6,7 @@ Park Y, Shaw KM, Chiel HJ, Thomas PJ. The Infinitesimal Phase Response Curves of
 To generate the various figures from the paper, you will need to run the following commands:
 
 `python generate_figures.py
+
 `python pw_const.py
 
 Some subfigures are generated independently. We used inkscape to put them together.
